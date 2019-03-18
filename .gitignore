@@ -1,0 +1,9 @@
+*.sqlite3
+*.key
+*.pyc
+.idea/*
+venv/*
+rango/test_*.py
+rango/tests_*.py
+rango/decorators.py
+rango/run_tests.py
