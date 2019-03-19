@@ -36,11 +36,13 @@
 				
                 <br/>
 				<ul class="nav nav-list flex-column">
-			                <form>
-                    <li class="nav-item"><input class="search-query form-control suggestion" type="text"
-                                                name="suggestion" value="" id="suggestion" placeholder="Search location""/>
-                    </li>
-                </form>
+					 <form action="/search/" method="get"> 
+					<input name="query" type="text" placeholder="Search location">  
+					<input type="radio" form="radiobuttons" name="choice" id="c1" value="hotels" checked="checked" >Hotels</br>
+					<input type="radio" form="radiobuttons" name="choice" id="c2" value="dogsitters" >Dogsitters</br>
+					<input value="Search" type="submit"> 
+					</form>
+
 			
 				
 		
@@ -48,14 +50,7 @@
 				
 				
             </div>
-            <div class="col-lg-2 text-right">
-			
-		<input type="radio" id="r1" name="rate" value="hotels" checked="checked"> Hotels </br>
-		<input type="radio" id="r2" name="rate" value="volunteers">Volunteers</br> 
-		<input type="radio" id="r3" name="rate" value="events"> Events</br>
-         
-            </div>
-        </div>
+             </div>
     </div>
 
     
