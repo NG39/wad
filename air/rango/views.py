@@ -127,77 +127,6 @@ def show_dogsitter(request, dogsitter_name_slug):
             context_dict['result_list'] = result_list
 
     return render(request, 'rango/dogsitter.html', context_dict)
-@login_required
-def add_category(request):
-    form = CategoryForm()
-
-    if request.method == 'POST':
-        form = CategoryForm(request.POST)
-
-        if form.is_valid():
-            form.save(commit=True)
-            return index(request)
-        else:
-            print(form.errors)
-
-    return render(request, 'rango/add_category.html', {'form': form})
-
-
-@login_required
-def add_page(request, category_name_slug):
-    try:
-        category = Category.objects.get(slug=category_name_slug)
-    except Category.DoesNotExist:
-        category = None
-
-    form = PageForm()
-    if request.method == 'POST':
-        form = PageForm(request.POST)
-        if form.is_valid():
-            if category:
-                page = form.save(commit=False)
-                page.category = category
-                page.views = 0
-                page.save()
-                return show_category(request, category_name_slug)
-        else:
-            print(form.errors)
-    context_dict = {'form': form, 'category': category}
-    return render(request, 'rango/add_page.html', context_dict)
-
-
-def register(request):
-    registered = False
-
-    if request.method == 'POST':
-        user_form = UserForm(data=request.POST)
-        profile_form = UserProfileForm(data=request.POST)
-
-        if user_form.is_valid() and profile_form.is_valid():
-            user = user_form.save()
-            user.set_password(user.password)
-            user.save()
-
-            profile = profile_form.save(commit=False)
-            profile.user = user
-
-            if 'picture' in request.FILES:
-                profile.picture = request.FILES['picture']
-            profile.save()
-
-            registered = True
-        else:
-            print(user_form.errors, profile_form.errors)
-    else:
-        user_form = UserForm()
-        profile_form = UserProfileForm()
-
-    ctx = {
-        'user_form': user_form,
-        'profile_form': profile_form,
-        'registered': registered}
-
-    return render(request, 'rango/register.html', context=ctx)
 
 
 
@@ -409,3 +338,18 @@ def get_dog_owner_profile(request):
         'description': owner.description,
     }
     return render(request, "wad/dog_owner_detail.html", context)
+    
+def add_dog(request):
+    form = AddDogForm()
+
+    if request.method == 'POST':
+        form = AddDogForm(request.POST)
+
+        if form.is_valid():
+
+            form.save(commit=True)
+            return index(request)
+        else:
+            print(form.errors)
+
+    return render(request, 'rango/add_dog.html', {'form':form})
