@@ -13,8 +13,8 @@ class DogOwner(models.Model):
     slug = models.SlugField()
 
     def save(self, *args, **kwargs):
-	self.slug = slugify(self.username)
-	super(DogOwner, self).save(*args, **kwargs)
+		self.slug = slugify(self.username)
+		super(DogOwner, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.user.username
@@ -33,11 +33,11 @@ class Hotel(models.Model):
     slug = models.SlugField()
 
     def save(self, *args, **kwargs):
-	self.slug = slugify(self.username)
-	super(Hotel, self).save(*args, **kwargs)
+		self.slug = slugify(self.username)
+		super(Hotel, self).save(*args, **kwargs)
 
     def __str__(self):
-	return self.username
+		return self.username
 
 class DogSitterP(models.Model):
     user = models.OneToOneField(User)
@@ -53,11 +53,11 @@ class DogSitterP(models.Model):
     slug = models.SlugField()
 
     def save(self, *args, **kwargs):
-	self.slug = slugify(self.username)
-	super(DogSitter, self).save(*args, **kwargs)
+		self.slug = slugify(self.username)
+		super(DogSitter, self).save(*args, **kwargs)
 
     def __str__(self):
-	return self.username
+		return self.username
 
 class Dog(models.Model):
     max_length = 128

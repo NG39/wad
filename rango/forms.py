@@ -21,13 +21,13 @@ class DogForm(forms.Modelform):
     size = forms.ChoiceField(label="", inital='', widget=forms.Select(), required=True)
     age = forms.IntegerField(max_length=2, help_text="Please enter your dog's age.")
     breed = forms.CharField(max_length=Dog.max_length, help_text = "Please enter your dog's breed(s)")
-    special_needs = forms.CharField(max_length=Dog.max_length, help_text = "Please enter any specila needs sitters should be aware of.")
+    special_needs = forms.CharField(max_length=Dog.max_length, help_text = "Please enter any special needs sitters should be aware of.")
     picture = forms.ImageField(required=False)
 
     class Meta:
-	model = Dog
-	exclude = ('owner', )
-	fields = ('name', 'size', 'age', 'breed', 'special_needs', 'picture', )
+		model = Dog
+		exclude = ('owner', )
+		fields = ('name', 'size', 'age', 'breed', 'special_needs', 'picture', )
 
 class HotelForm(forms.ModelForm):
     username = forms.CharField(max_length=128, help_text = "Please enter your username.")
