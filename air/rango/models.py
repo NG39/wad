@@ -32,11 +32,11 @@ class Hotel(models.Model):
     slug = models.SlugField()
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.username)
-        super(Hotel, self).save(*args, **kwargs)
+	       self.slug = slugify(self.username)
+	       super(Hotel, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.username
+	       return self.username
 
 class DogSitter(models.Model):
     user = models.OneToOneField(User)
@@ -52,18 +52,18 @@ class DogSitter(models.Model):
     slug = models.SlugField()
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.username)
-        super(DogSitter, self).save(*args, **kwargs)
+	       self.slug = slugify(self.username)
+	       super(DogSitter, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.username
+	       return self.username
 
 class Dog(models.Model):
     max_length = 128
     name = models.CharField(max_length = max_length)
     dog_sizes = (('S', 'Small'), ('M', 'Medium'), ('L', 'Large'))
     size = models.CharField(max_length=1, choices=dog_sizes)
-    age = models.IntegerField(max_length=2)
+    age = models.IntegerField()
     breed = models.CharField(max_length = max_length)
     special_needs = models.CharField(max_length=max_length)
     picture = models.ImageField(upload_to='dog_images', blank=True) ##CREATE DOG_IMAGES

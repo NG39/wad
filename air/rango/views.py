@@ -137,7 +137,7 @@ def get_hotel_reservation_dets(request, city_name):
         'name': hot.name,
         'description': hot.description,
     }
-    return render(request, "wad/hot_detail.html", context)
+    return render(request, "rango/hot_detail.html", context)
 
 
 def get_dogsitter_reservation_dets(request, city_name):
@@ -147,7 +147,7 @@ def get_dogsitter_reservation_dets(request, city_name):
         'name': sitter.name,
         'description': sitter.description,
     }
-    return render(request, "wad/sitter_detail.html", context)
+    return render(request, "rango/sitter_detail.html", context)
 
 
 
@@ -202,8 +202,6 @@ def register_hotel(request):
         'rango/register_hotel.html',
         {'hotel_form': hotel_form,
         'registered': registered})
-
-
 
 def register_sitter(request):
     # A boolean value for telling the template
@@ -309,7 +307,7 @@ def register_dog_owner(request):
         {'dog_owner_form': dog_owner_form,
         'registered': registered})
 
-
+ # FIXME:  on click  not with city name arg
 def get_hotel_profile(request, city_name):
     hot = Hotel.objects.get(city=city_name)
     context = {
@@ -317,9 +315,9 @@ def get_hotel_profile(request, city_name):
         'name': hot.name,
         'description': hot.description,
     }
-    return render(request, "wad/hot_detail.html", context)
+    return render(request, "rango/hot_detail.html", context)
 
-
+ # FIXME:  on click  not with city name arg get profile page if u are a dogsitter
 def get_dogsitter_profile(request, city_name):
     sitter = DogSitter.objects.get(city=city_name)
     context = {
@@ -327,9 +325,9 @@ def get_dogsitter_profile(request, city_name):
         'name': sitter.name,
         'description': sitter.description,
     }
-    return render(request, "wad/sitter_detail.html", context)
+    return render(request, "rango/sitter_detail.html", context)
 
-
+ # FIXME:  get the profilepage when u are a dog owner
 def get_dog_owner_profile(request):
     owner = DogOwner.objects.getall()
     context = {
@@ -337,8 +335,8 @@ def get_dog_owner_profile(request):
         'name': owner.name,
         'description': owner.description,
     }
-    return render(request, "wad/dog_owner_detail.html", context)
-    
+    return render(request, "rango/dog_owner_detail.html", context)
+
 def add_dog(request):
     form = AddDogForm()
 
