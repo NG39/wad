@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from rango.models import Hotel, Dogsitter, UserProfile, User
-from rango.forms import CategoryForm, PageForm, UserProfileForm, UserForm
+from rango.models import *
+from rango.forms import *
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
@@ -11,22 +11,46 @@ from django.utils import timezone
 
 
 def homepage(request):
-    return HttpResponse("Homepage"
-                        "<br>"
-                        "Rango says hey there partner!"
-                        "<br>"
-                        "<a href='/rango'>Rango</href>")
+    return HttpResponse("<a href='/rango'>Welcome to AirbnBark</href>")
 
+
+def get_hotel_list(city_name,max_results=0,):#city_name is the city searched for
+    hot_list = []
+    try:
+        hot_list = Hotel.objects.filter(city=city_name)
+    except:
+        hot_list = []
+        if max_results > 0:
+                if len(hot_list) > max_results:
+                        hot_list = hot_list[:max_results]
+    return hot_list
+
+
+def get_dogsitter_list(city_name,max_results=0,):#city_name is the city searched for
+    try:
+        dogsitter_list = DogSitter.objects.filter(city=city_name)
+    except:
+        dogsitter_list = []
+    if max_results > 0:
+        if len(dogsitter_list) > max_results:
+            dogsitter_list = dogsitter_list[:max_results]
+    return dogsitter_list
 
 def search(request):
     result_list = []
     query = None
-    if request.method == 'POST':
-        query = request.POST['query'].strip()
-        if query:
-            # Run our Webhose search function to get the results list!
-            result_list = run_query(query)
+    query = request.GET['query'].strip()
+    choice = request.GET['choice'] #will get value of button
+    city_name = query
+    if query:
+        if choice=="hotels":
+            result_list = get_hotel_list(city_name)
+        if choice=="dogsitters":
+            result_list = get_dogsitter_list(city_name)
     return render(request, 'rango/search.html', {'result_list': result_list, 'search_query': query})
+
+
+
 
 
 def index(request):
@@ -74,11 +98,11 @@ def show_hotel(request, hotel_name_slug):
     if request.method == 'POST':
         query = request.POST['query'].strip()
         if query:
-     
+
             result_list = run_query(query)
             context_dict['query'] = query
             context_dict['result_list'] = result_list
- 
+
 
     return render(request, 'rango/hotel.html', context_dict)
 
@@ -176,184 +200,212 @@ def register(request):
     return render(request, 'rango/register.html', context=ctx)
 
 
-def user_login(request):
-    error = None
+
+def get_hotel_reservation_dets(request, city_name):
+    hot = Hotel.objects.get(city=city_name)
+    context = {
+        ##what we want to be displayed##
+        'name': hot.name,
+        'description': hot.description,
+    }
+    return render(request, "wad/hot_detail.html", context)
+
+
+def get_dogsitter_reservation_dets(request, city_name):
+    sitter = DogSitter.objects.get(city=city_name)
+    context = {
+        ##what we want to be displayed##
+        'name': sitter.name,
+        'description': sitter.description,
+    }
+    return render(request, "wad/sitter_detail.html", context)
+
+
+
+def register_hotel(request):
+    # A boolean value for telling the template
+    # whether the registration was successful.
+    # Set to False initially. Code changes value to
+    # True when registration succeeds.
+    registered = False
+
+    # If it's a HTTP POST, we're interested in processing form data.
     if request.method == 'POST':
+        # Attempt to grab information from the raw form information.
+        hotel_form = HotelForm(data=request.POST)
 
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+        # If the two forms are valid...
+        if hotel_form.is_valid():
+            # Save the user's form data to the database.
+            hotel_user = hotel_form.save()
 
-        user = authenticate(username=username, password=password)
+            # Now we hash the password with the set_password method.
+            # Once hashed, we can update the user object.
+            hotel_user.set_password(user.password)
+            hotel_user.save()
 
-        if user:
-            if user.is_active:
-                login(request, user)
-                return HttpResponseRedirect(reverse('index'))
-            else:
-                error = "Your Rango account is disabled."
 
+            # Did the user provide a profile picture?
+            # If so, we need to get it from the input form and
+             #put it in the UserProfile model.
+            if 'picture' in request.FILES:
+                hotel_user.picture = request.FILES['picture']
+
+            # Now we save the UserProfile model instance.
+            hotel_user.save()
+
+            # Update our variable to indicate that the template
+            # registration was successful.
+            registered = True
         else:
-            print("Invalid login details: {0}, {1}".format(username, password))
-            error = "Invalid login details supplied."
+            # Invalid form or forms - mistakes or something else?
+            # Print problems to the terminal.
+            print(hotel_form.errors)
 
-    return render(request, 'rango/index.html', {'error': error})
-
-
-@login_required
-def restricted(request):
-    return render(request, 'rango/restricted.html', context={})
-
-
-@login_required
-def user_logout(request):
-    logout(request)
-    return HttpResponseRedirect(reverse('index'))
-
-
-# A helper method
-def get_server_side_cookie(request, cookie, default_val=None):
-    val = request.session.get(cookie)
-    if not val:
-        val = default_val
-    return val
-
-
-# Updated the function definition
-
-def visitor_cookie_handler(request):
-    visits = int(get_server_side_cookie(request, 'visits', '1'))
-    last_visit_cookie = get_server_side_cookie(request, 'last_visit', str(datetime.now()))
-    last_visit_time = datetime.strptime(last_visit_cookie[:-7],
-                                        '%Y-%m-%d %H:%M:%S')
-    # If it's been more than a day since the last visit...
-    if (datetime.now() - last_visit_time).days > 0:
-        visits += 1
-        request.session['last_visit'] = str(datetime.now())
     else:
-        request.session['last_visit'] = last_visit_cookie
-
-    request.session['visits'] = visits
-
-
-def track_url(request):
-    page_id = None
-    if request.method == 'GET':
-        if 'page_id' in request.GET:
-            page_id = request.GET['page_id']
-            try:
-                page = Page.objects.get(id=page_id)
-                page.views = page.views + 1
-                page.last_visit = timezone.now()
-
-                print(page.views)
-                page.save()
-                return redirect(page.url)
-            except Category.DoesNotExist:
-                pass
-        return redirect('index')
+        # Not a HTTP POST, so we render our form using two ModelForm instances.
+        # These forms will be blank, ready for user input.
+        hotel_form = HotelForm()
 
 
-@login_required
-def register_profile(request):
-    form = UserProfileForm()
+# Render the template depending on the context.
+    return render(request,
+        'rango/register_hotel.html',
+        {'hotel_form': hotel_form,
+        'registered': registered})
+
+
+
+def register_sitter(request):
+    # A boolean value for telling the template
+    # whether the registration was successful.
+    # Set to False initially. Code changes value to
+    # True when registration succeeds.
+    registered = False
+
+    # If it's a HTTP POST, we're interested in processing form data.
     if request.method == 'POST':
-        form = UserProfileForm(request.POST, request.FILES)
-        if form.is_valid():
-            user_profile = form.save(commit=False)
-            user_profile.user = request.user
-            user_profile.save()
-            return redirect('index')
+        # Attempt to grab information from the raw form information.
+        sitter_form = SitterForm(data=request.POST)
+
+        # If the two forms are valid...
+        if sitter_form.is_valid():
+            # Save the user's form data to the database.
+            sitter_user = sitter_form.save()
+
+            # Now we hash the password with the set_password method.
+            # Once hashed, we can update the user object.
+            sitter_user.set_password(user.password)
+            sitter_user.save()
+
+
+            # Did the user provide a profile picture?
+            # If so, we need to get it from the input form and
+             #put it in the UserProfile model.
+            if 'picture' in request.FILES:
+                sitter_user.picture = request.FILES['picture']
+
+            # Now we save the UserProfile model instance.
+            sitter_user.save()
+
+            # Update our variable to indicate that the template
+            # registration was successful.
+            registered = True
         else:
-            print(form.errors)
-    context_dict = {'form': form}
-    return render(request, 'rango/profile_registration.html', context_dict)
+            # Invalid form or forms - mistakes or something else?
+            # Print problems to the terminal.
+            print(sitter_form.errors)
+
+    else:
+        # Not a HTTP POST, so we render our form using two ModelForm instances.
+        # These forms will be blank, ready for user input.
+        sitter_form = SitterForm()
 
 
-@login_required
-def profile(request, username):
-    try:
-        user = User.objects.get(username=username)
-    except User.DoesNotExist:
-        return redirect('index')
+# Render the template depending on the context.
+    return render(request,
+        'rango/register_sitter.html',
+        {'sitter_form': sitter_form,
+        'registered': registered})
 
-    userprofile = UserProfile.objects.get_or_create(user=user)[0]
-    form = UserProfileForm({
-        'website': userprofile.website,
-        'picture': userprofile.picture
-    })
+def register_dog_owner(request):
+    # A boolean value for telling the template
+    # whether the registration was successful.
+    # Set to False initially. Code changes value to
+    # True when registration succeeds.
+    registered = False
 
+    # If it's a HTTP POST, we're interested in processing form data.
     if request.method == 'POST':
-        form = UserProfileForm(request.POST, request.FILES, instance=userprofile)
+        # Attempt to grab information from the raw form information.
+        dog_owner_form = DogOwnerForm(data=request.POST)
 
-        if form.is_valid():
-            form.save(commit=True)
+        # If the two forms are valid...
+        if dog_owner_form.is_valid():
+            # Save the user's form data to the database.
+            dog_owner_user = dog_owner_form.save()
 
-            return redirect('profile', user.username)
+            # Now we hash the password with the set_password method.
+            # Once hashed, we can update the user object.
+            dog_owner_user.set_password(user.password)
+            dog_owner_user.save()
 
+
+            # Did the user provide a profile picture?
+            # If so, we need to get it from the input form and
+             #put it in the UserProfile model.
+            if 'picture' in request.FILES:
+                dog_owner_user.picture = request.FILES['picture']
+
+            # Now we save the UserProfile model instance.
+            dog_owner_user.save()
+
+            # Update our variable to indicate that the template
+            # registration was successful.
+            registered = True
         else:
+            # Invalid form or forms - mistakes or something else?
+            # Print problems to the terminal.
+            print(dog_owner_form.errors)
 
-            print(form.errors)
-
-    return render(request, 'rango/profile.html', {'userprofile': userprofile, 'selecteduser': user, 'form': form})
-
-
-@login_required
-def list_profiles(request):
-    userprofile_list = UserProfile.objects.all()
-    return render(request, 'rango/list_profiles.html',
-                  {'userprofile_list': userprofile_list})
+    else:
+        # Not a HTTP POST, so we render our form using two ModelForm instances.
+        # These forms will be blank, ready for user input.
+        dog_owner_form = DogOwnerForm()
 
 
-@login_required
-def like_category(request):
-    cat_id = None
-    if request.method == 'GET':
-        cat_id = request.GET['category_id']
-        likes = 0
-    if cat_id:
-        cat = Category.objects.get(id=int(cat_id))
-        if cat:
-            likes = cat.likes + 1
-            cat.likes = likes
-            cat.save()
-    return HttpResponse(likes)
+# Render the template depending on the context.
+    return render(request,
+        'rango/register_dog_owner.html',
+        {'dog_owner_form': dog_owner_form,
+        'registered': registered})
 
 
-def get_category_list(max_results=0, starts_with=''):
-    cat_list = []
-    if starts_with:
-        cat_list = Category.objects.filter(name__istartswith=starts_with)
-    if max_results > 0:
-        if len(cat_list) > max_results:
-            cat_list = cat_list[:max_results]
-    return cat_list
+def get_hotel_profile(request, city_name):
+    hot = Hotel.objects.get(city=city_name)
+    context = {
+        ##what we want to be displayed##
+        'name': hot.name,
+        'description': hot.description,
+    }
+    return render(request, "wad/hot_detail.html", context)
 
 
-def suggest_category(request):
-    cat_list = []
-    starts_with = ''
-    if request.method == 'GET':
-        starts_with = request.GET['suggestion']
-    cat_list = get_category_list(8, starts_with)
-    return render(request, 'rango/cats.html', {'cats': cat_list})
+def get_dogsitter_profile(request, city_name):
+    sitter = DogSitter.objects.get(city=city_name)
+    context = {
+        ##what we want to be displayed##
+        'name': sitter.name,
+        'description': sitter.description,
+    }
+    return render(request, "wad/sitter_detail.html", context)
 
 
-@login_required
-def auto_add_page(request):
-    cat_id = None
-    url = None
-    title = None
-    context_dict = {}
-
-    if request.method == 'GET':
-        cat_id = request.GET['category_id']
-        url = request.GET['url']
-        title = request.GET['title']
-        if cat_id:
-            category = Category.objects.get(id=int(cat_id))
-            p = Page.objects.get_or_create(category=category,
-                                           title=title, url=url)
-            pages = Page.objects.filter(category=category).order_by('-views')
-            # Adds our results list to the template context under name pages.
-            context_dict['pages'] = pages
-    return render(request, 'rango/page_list.html', context_dict)
+def get_dog_owner_profile(request):
+    owner = DogOwner.objects.getall()
+    context = {
+        ##what we want to be displayed##
+        'name': owner.name,
+        'description': owner.description,
+    }
+    return render(request, "wad/dog_owner_detail.html", context)
