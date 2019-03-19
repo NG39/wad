@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from rango.models import Category, Page, UserProfile, User
+from rango.models import Hotel, Dogsitter, UserProfile, User
 from rango.forms import CategoryForm, PageForm, UserProfileForm, UserForm
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
@@ -10,7 +10,7 @@ from rango.webhose_search import run_query
 from django.utils import timezone
 
 
-def homepage(requeest):
+def homepage(request):
     return HttpResponse("Homepage"
                         "<br>"
                         "Rango says hey there partner!"
@@ -53,49 +53,56 @@ def about(request):
     return render(request, 'rango/about.html', context=context_dict)
 
 
-def show_category(request, category_name_slug):
-    # Create a context dictionary that we can pass
-    # to the template rendering engine.
+
+
+def show_hotel(request, hotel_name_slug):
+
     context_dict = {}
     try:
-        # Can we find a category name slug with the given name?
-        # If we can't, the .get() method raises a DoesNotExist exception.
-        # So the .get() method returns one model instance or raises an exception.
-        category = Category.objects.get(slug=category_name_slug)
-        # Retrieve all of the associated pages.
-        # Note that filter() returns a list of page objects or an empty list
-        pages = Page.objects.filter(category=category)
-        # Adds our results list to the template context under name pages.
-        context_dict['pages'] = pages
-        # We also add the category object from
-        # the database to the context dictionary.
-        # We'll use this in the template to verify that the category exists.
-        context_dict['category'] = category
-        context_dict['query'] = category.name
-        # We get here if we didn't find the specified category.
-        # Don't do anything -
-        # the template will display the "no category" message for us.
-    except Category.DoesNotExist:
-        context_dict['category'] = None
-        context_dict['pages'] = None
-    # New code added here to handle a POST request
-    # create a default query based on the category name
-    # to be shown in the search box
+
+        hotel = Hotel.objects.get(slug=hotel_name_slug)
+
+        context_dict['hotel'] = hotel
+        context_dict['query'] = hotel.name
+
+    except Hotel.DoesNotExist:
+        context_dict['hotel'] = None
+
 
     result_list = []
 
     if request.method == 'POST':
         query = request.POST['query'].strip()
         if query:
-            # Run our search API function to get the results list!
+     
             result_list = run_query(query)
             context_dict['query'] = query
             context_dict['result_list'] = result_list
-            # Go render the response and return it to the client.
+ 
 
-    return render(request, 'rango/category.html', context_dict)
+    return render(request, 'rango/hotel.html', context_dict)
 
+def show_dogsitter(request, dogsitter_name_slug):
 
+    context_dict = {}
+    try:
+        dogsitter = DogSitter.objects.get(slug=dogsitter_name_slug)
+        context_dict['dogsitter'] = dogsitter
+        context_dict['query'] = dogsitter.fist_name + " " +dogsitter.last_name
+
+    except DogSitter.DoesNotExist:
+        context_dict['dogsitter'] = None
+
+    result_list = []
+
+    if request.method == 'POST':
+        query = request.POST['query'].strip()
+        if query:
+            result_list = run_query(query)
+            context_dict['query'] = query
+            context_dict['result_list'] = result_list
+
+    return render(request, 'rango/dogsitter.html', context_dict)
 @login_required
 def add_category(request):
     form = CategoryForm()
@@ -189,7 +196,7 @@ def user_login(request):
             print("Invalid login details: {0}, {1}".format(username, password))
             error = "Invalid login details supplied."
 
-    return render(request, 'rango/login.html', {'error': error})
+    return render(request, 'rango/index.html', {'error': error})
 
 
 @login_required
