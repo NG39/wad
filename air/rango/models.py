@@ -30,7 +30,13 @@ class Hotel(models.Model):
     description = models.CharField(max_length = 500)
     price = models.IntegerField()
     slug = models.SlugField()
-
+    '''info={
+    "City: ":city,
+    "Adress: ": address,
+    "Phone number: ":phone_number,
+    "Number of rooms available: ": available_rooms,
+    "Description: ": description,
+    "Price per night per room: "]'''
     def save(self, *args, **kwargs):
 	       self.slug = slugify(self.user.username)
 	       super(Hotel, self).save(*args, **kwargs)

@@ -13,11 +13,11 @@ urlpatterns = [
     url(r'^logout/$', views.user_logout, name='logout'),
     url(r'^delete/(?P<username_slug>[\w|\W.-]+)/$', views.user_deactivate, name='deactivate_user'),
 
+    url(r'^profile/(?P<username>[\w\-]+)/$', views.profile, name='profile'),
     #those are the profile pages if u are a hotel owner dog owner or dogsitter  PERSONAL PAGES
-    url(r'^hot_detail/(?P<username_slug>[\w\-]+)/$', views.profile_load, name='get_hotel_profile'),
-    url(r'^sitter_detail/(?P<username_slug>[\w\-]+)/$', views.profile_load, name='get_dogsitter_profile'),
-    url(r'^dog_owner_detail/(?P<username_slug>[\w\-]+)/$', views.profile_load, name='get_dog_owner_profile'),
-
+    #url(r'^hot_detail/(?P<username_slug>[\w\-]+)/$', views.profile_load, name='get_hotel_profile'),
+    #url(r'^sitter_detail/(?P<username_slug>[\w\-]+)/$', views.profile_load, name='get_dogsitter_profile'),
+    #url(r'^dog_owner_detail/(?P<username_slug>[\w\-]+)/$', views.profile_load, name='get_dog_owner_profile'),
     url(r'^search/$', views.search, name='search'),
     #search result pages for all types of users
     url(r'^hotel/(?P<username_slug>[\w\-]+)/$', views.show_hotel, name='show_hotel'),# username of the hotel
