@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rango',
     'registration',
+	'widget_tweaks',
+	'phone_field',
 ]
 
 MIDDLEWARE = [

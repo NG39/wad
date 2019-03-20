@@ -1,7 +1,8 @@
 from django import forms
 from rango.models import Hotel, DogSitter, Dog, DogOwner
 from django.contrib.auth.models import User
-from django.core.validators import MinLengthValidator, MaxLengthValidator
+from phone_field import PhoneField
+
 
 class DogForm(forms.ModelForm):
 
@@ -23,7 +24,7 @@ class DogOwnerForm(forms.ModelForm):
     email = forms.EmailField(max_length=128, help_text = "Please enter your email.")
     username = forms.CharField(max_length=128, help_text = "Please enter your username.")
     password = forms.CharField(widget=forms.PasswordInput())
-    phone_number = forms.IntegerField(validators=[MaxLengthValidator(11),MinLengthValidator(11)], help_text = "Please enter your phone number.")
+    phone_number = PhoneField(blank=True,help_text="Please enter your phone number.")
     city = forms.CharField(max_length=128, help_text = "Please enter your city.")
     picture = forms.ImageField(required=False)
 
@@ -40,7 +41,7 @@ class HotelForm(forms.ModelForm):
     address = forms.CharField(max_length=128, help_text = "Please enter the hotel's address.")
     city = forms.CharField(max_length=128, help_text = "Please enter the city of your hotel.")
     picture = forms.ImageField(required=True)
-    phone_number = forms.IntegerField(validators=[MaxLengthValidator(11),MinLengthValidator(11)], help_text = "Please enter your phone number.")
+    phone_number = PhoneField(blank=True,help_text="Please enter your phone number.")
     available_rooms = forms.IntegerField()
     description = forms.CharField(max_length = 500)
     price = forms.IntegerField()
@@ -62,7 +63,7 @@ class DogSitterForm(forms.ModelForm):
     bio = forms.CharField(max_length = 500, help_text = "Why do you want to be a dogsitter?")
     price_per_night = forms.IntegerField(required=True, help_text = "Please enter your per night price.")
     availability = forms.CharField(max_length=128)
-    phone_number = forms.IntegerField(validators=[MaxLengthValidator(11),MinLengthValidator(11)], help_text = "Please enter your phone number.")
+    phone_number = PhoneField(blank=True,help_text="Please enter your phone number.")
     city = forms.CharField(max_length=128, help_text = "Please enter the city you live in.")#
     password = forms.CharField(widget=forms.PasswordInput())
 

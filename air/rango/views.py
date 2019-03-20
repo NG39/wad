@@ -191,7 +191,7 @@ def register_hotel(request):
 
 # Render the template depending on the context.
     return render(request,
-        'rango/register_hotel.html',
+        'registration/register_hotel.html',
         {'hotel_form': hotel_form,
         'registered': registered})
 
@@ -205,7 +205,7 @@ def register_sitter(request):
     # If it's a HTTP POST, we're interested in processing form data.
     if request.method == 'POST':
         # Attempt to grab information from the raw form information.
-        sitter_form = SitterForm(data=request.POST)
+        sitter_form = DogSitterForm(data=request.POST)
 
         # If the two forms are valid...
         if sitter_form.is_valid():
@@ -238,12 +238,12 @@ def register_sitter(request):
     else:
         # Not a HTTP POST, so we render our form using two ModelForm instances.
         # These forms will be blank, ready for user input.
-        sitter_form = SitterForm()
+        sitter_form = DogSitterForm()
 
 
 # Render the template depending on the context.
     return render(request,
-        'rango/register_sitter.html',
+        'registration/register_sitter.html',
         {'sitter_form': sitter_form,
         'registered': registered})
 
@@ -291,6 +291,12 @@ def register_dog_owner(request):
         # Not a HTTP POST, so we render our form using two ModelForm instances.
         # These forms will be blank, ready for user input.
         dog_owner_form = DogOwnerForm()
+		
+# Render the template depending on the context.
+    return render(request,
+        'rango/register_dog_owner.html',
+        {'dog_owner_form': dog_owner_form,
+        'registered': registered})
 
 @login_required
 def user_logout(request):
@@ -319,12 +325,6 @@ def user_login(request):
             error = "Invalid login details supplied."
 
     return render(request, 'rango/login.html', {'error': error})
-
-# Render the template depending on the context.
-    return render(request,
-        'rango/register_dog_owner.html',
-        {'dog_owner_form': dog_owner_form,
-        'registered': registered})
 		
 @login_required
 def user_deactivate(request, username): 
