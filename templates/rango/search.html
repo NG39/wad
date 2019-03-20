@@ -1,0 +1,25 @@
+{% extends 'rango/base.html' %}
+{% load staticfiles %}
+{% block title %}
+{% block body_block %}
+
+
+
+
+<h1> {{ search }} </h1>
+<div class="container-fluid">
+{% if result_list %}
+
+<ul>
+	{% for r in result_list %}
+		<li> {{ r.name}} {{ r.picture }} {{ r.price }} </li>
+	{% endfor %}
+</ul>
+{% else %}
+
+	<strong> No results found</strong>
+{% endif %}
+</div>
+{% endblock %}
+
+		
