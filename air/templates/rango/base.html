@@ -54,6 +54,16 @@ initial-scale=1, shrink-to-fit=no">
                 </a>
             </li>
 
+
+                {% if user.is_authenticated %}
+                {if user }
+				        <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">
+                        Logout
+                    </a>
+                </li>
+                {% else %}
+
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'register_hotel' %}">
                         Register a  Hotel
@@ -69,7 +79,12 @@ initial-scale=1, shrink-to-fit=no">
                         Register Here
                     </a>
                 </li>
-                
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">
+                        Login
+                    </a>
+                </li>
+                {% endif %}
         </ul>
     </div>
 </nav>

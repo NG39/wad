@@ -299,7 +299,7 @@ def register_dog_owner(request):
         {'dog_owner_form': dog_owner_form,
         'registered': registered})
 
- # FIXME:  on click  not with city name arg
+''' # FIXME:  on click  not with city name arg
 def get_hotel_profile(request, city_name):
     hot = Hotel.objects.get(city=city_name)
     context = {
@@ -328,7 +328,7 @@ def get_dog_owner_profile(request):
         'description': owner.description,
     }
     return render(request, "rango/dog_owner_detail.html", context)
-
+'''
 def add_dog(request):
     form = AddDogForm()
 
@@ -343,3 +343,101 @@ def add_dog(request):
             print(form.errors)
 
     return render(request, 'rango/add_dog.html', {'form':form})
+
+
+@login_required
+def user_logout(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('index'))
+
+
+def user_login(request):
+    error = None
+    if request.method == 'POST':
+
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(username=username, password=password)
+
+        if user:
+            if user.is_active:
+                login(request, user)
+                return HttpResponseRedirect(reverse('index'))
+            else:
+                error = "Your Rango account is disabled."
+
+        else:
+            print("Invalid login details: {0}, {1}".format(username, password))
+            error = "Invalid login details supplied."
+
+    return render(request, 'rango/login.html', {'error': error})
+
+# Render the template depending on the context.
+    return render(request,
+        'rango/register_dog_owner.html',
+        {'dog_owner_form': dog_owner_form,
+        'registered': registered})
+
+@login_required
+def user_deactivate(request, username):
+    context_dict = {}
+
+    try:
+        user = User.objects.get(username=username)
+        user.is_active = False
+        user.save()
+        context_dict['result'] = 'The user has been disabled.'
+    except User.DoesNotExist:
+        context['result'] = 'User does not exist.'
+    except Exception as e:
+        context['error'] = e.message
+
+    return render(request, 'registration/deactivate.html', context=context_dict)
+
+## version one
+def profile_load(request, username):
+    context_dict = {}
+
+    try:
+        hot = Hotel.objects.get(username=username)
+        ##add context dict
+
+
+        return  render(request, "rango/hot_detail.html", context)
+    except:
+        try:
+            ds = DogSitter.objects.get(username=username)
+
+
+
+            return  render(request, "rango/sitter_detail.html", context)
+        except:
+            try:
+                do = DogOwner.objects.get(username=username)
+
+
+
+                return  render(request, "rango/dog_owner_detail.html", context)
+            except:
+                return render(reverse(index))
+
+##version 2
+"""
+def profile_load(request, username):
+    context_dict = {}
+
+    try:
+        user = User.objects.get(username=username)
+        if user instance of Hotel:
+
+            return  render(request, "rango/hot_detail.html", context)
+        elif user instance of DogSitter:
+            ds = DogSitter.objects.get(username=username)
+            return  render(request, "rango/sitter_detail.html", context)
+        elif user instance of DogOwner:
+            owner = DogOwner.objects.get(username=username)
+            return  render(request, "rango/dog_owner_detail.html", context)
+        else:
+            return render(reverse(index))
+"""

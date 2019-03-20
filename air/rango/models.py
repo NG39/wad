@@ -2,12 +2,12 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
 from django.core.validators import MinLengthValidator, MaxLengthValidator
-
+from phone_field import PhoneField
 
 class DogOwner(models.Model):
     user = models.OneToOneField(User)
     picture = models.ImageField(upload_to='profile_images', blank=True)
-    phone_number = models.IntegerField(validators=[MaxLengthValidator(11),MinLengthValidator(11)])
+    phone_number = PhoneField(blank=True, help_text='Contact phone number')
     city = models.CharField(max_length=128)
     slug = models.SlugField()
 
@@ -25,8 +25,8 @@ class Hotel(models.Model):
     address = models.CharField(max_length = 256)
     city = models.CharField(max_length = 128)
     picture = models.ImageField(upload_to='hotel_images', blank=True)
-    phone_number = models.IntegerField(validators=[MaxLengthValidator(11),MinLengthValidator(11)])
-    available_rooms = models.IntegerField(default=0)
+    phone_number = PhoneField(blank=True, help_text='Contact phone number')
+    available_rooms = models.IntegerField()
     description = models.CharField(max_length = 500)
     price = models.IntegerField()
     slug = models.SlugField()
@@ -47,7 +47,7 @@ class DogSitter(models.Model):
     bio = models.CharField(max_length = 500)
     price_per_night = models.IntegerField()
     availablity = models.CharField(max_length=128)
-    phone_number = models.IntegerField(validators=[MaxLengthValidator(11),MinLengthValidator(11)])
+    phone_number = PhoneField(blank=True, help_text='Contact phone number')
     city = models.CharField(max_length=128)
     slug = models.SlugField()
 
