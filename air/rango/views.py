@@ -292,12 +292,56 @@ def register_dog_owner(request):
         # These forms will be blank, ready for user input.
         dog_owner_form = DogOwnerForm()
 
+@login_required
+def user_logout(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('index'))
+	
+
+def user_login(request):
+    error = None
+    if request.method == 'POST':
+
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(username=username, password=password)
+
+        if user:
+            if user.is_active:
+                login(request, user)
+                return HttpResponseRedirect(reverse('index'))
+            else:
+                error = "Your Rango account is disabled."
+
+        else:
+            print("Invalid login details: {0}, {1}".format(username, password))
+            error = "Invalid login details supplied."
+
+    return render(request, 'rango/login.html', {'error': error})
 
 # Render the template depending on the context.
     return render(request,
         'rango/register_dog_owner.html',
         {'dog_owner_form': dog_owner_form,
         'registered': registered})
+		
+@login_required
+def user_deactivate(request, username): 
+    context_dict = {}
+    
+    try:
+        user = User.objects.get(username=username)
+        user.is_active = False
+        user.save()
+        context_dict['result'] = 'The user has been disabled.'       
+    except User.DoesNotExist: 
+        context['result'] = 'User does not exist.'
+    except Exception as e: 
+        context['error'] = e.message
+
+    return render(request, 'registration/deactivate.html', context=context_dict) 
+
 
  # FIXME:  on click  not with city name arg
 def get_hotel_profile(request, city_name):
