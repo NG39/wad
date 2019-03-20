@@ -54,16 +54,8 @@ def search(request):
 
 
 def index(request):
-    request.session.set_test_cookie()
-    category_list = Category.objects.order_by('-likes')[:5]
-    page_list = Page.objects.order_by('-views')[:5]
 
-    context_dict = {'categories': category_list, 'pages': page_list}
-    visitor_cookie_handler(request)
-    context_dict['visits'] = request.session['visits']
-    context_dict['last_visit'] = request.session['last_visit'].split('.')[0]
-
-    response = render(request, 'rango/index.html', context=context_dict)
+    response = render(request, 'rango/index.html', context={})
     return response
 
 

@@ -7,8 +7,8 @@
     <style>
         .rango {
             width: 25vw;
-         
-           
+
+
         }
 
 
@@ -30,28 +30,28 @@
                 {% if user.is_authenticated %}
                     <h2>welcome {{ user.username }}!</h2>
                 {% else %}
-                    <h1> </h1>
+                    <h1> Welcome</h1>
                 {% endif %}
-				
-				
+
+
                 <br/>
 				<ul class="nav nav-list flex-column">
-					 <form action="/search/" method="get"> 
-					<input name="query" type="text" placeholder="Search location">  
+					 <form action="/search/" method="get">
+					<input name="query" type="text" placeholder="Search location">
 					<input type="radio" form="radiobuttons" name="choice" id="c1" value="hotels" checked="checked" >Hotels</br>
 					<input type="radio" form="radiobuttons" name="choice" id="c2" value="dogsitters" >Dogsitters</br>
-					<input value="Search" type="submit"> 
+					<input value="Search" type="submit">
 					</form>
 
-			
-				
-		
+
+
+
             </ul>
-				
-				
+
+
             </div>
              </div>
     </div>
 
-    
+
 {% endblock %}
