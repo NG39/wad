@@ -24,8 +24,9 @@
 		<ul>
 		{% for r in result_list %}
 
-			<li> <img src="{{ MEDIA_URL }}{{ r.picture }}"alt="{{ r.name }}" class="profile-img"/> 
-			<strong> Hotel name:</strong> {{ r.name}} <strong> Hotel price:</strong> {{ r.price }} </li>  
+			<li> 
+			<img src="{{ MEDIA_URL }}{{ r.picture }}"alt="{{ r.name }}" class="profile-img"/> <strong> Hotel name:</strong> {{ r.name}} <strong>Hotel price:</strong> {{ r.price }} <strong> <a href="/profile/r.user.username"> See details </strong>
+			</li>  
 
 		{% endfor %}
 		</ul>
