@@ -360,6 +360,8 @@ def user_deactivate(request, username):
 @login_required
 def profile(request, username):
     profiletype=""
+    userprofile= None
+    form=None
     try:
         user = User.objects.get(username=username)
 
@@ -367,54 +369,55 @@ def profile(request, username):
         return redirect('index')
     title = user.first_name + " "+ user.last_name
     try:
-        dog_owner_user = DogOwner.objects.get(user=user)
+        userprofile = DogOwner.objects.get_or_create(user=user)[0]
+
         profiletype="dog_owner"
         form = DogOwnerForm({
-            'picture': dog_owner_user.picture,
-            'phone_number':dog_owner_user.phone_number,
-            'city': dog_owner_user.city,
+            'picture': userprofile.picture,
+            'phone_number':userprofile.phone_number,
+            'city': userprofile.city,
             })
     except:
         pass
     try:
-        hotel_user = Hotel.objects.get(user=user)
+        userprofile = Hotel.objects.get_or_create(user=user)[0]
         profiletype="hotel"
-        title = hotel_user.hotel_name
+        title = userprofile.hotel_name
         form = HotelForm({
 
-            'picture':hotel_user.picture,
-            'city': hotel_user.city,
-            'address': hotel_user.address,
-            'phone_number':hotel_user.phone_number,
-            'available_rooms':hotel_user.available_rooms,
-            'description':hotel_user.description,
-            'price':hotel_user.price,
+            'picture':userprofile.picture,
+            'city': userprofile.city,
+            'address': userprofile.address,
+            'phone_number':userprofile.phone_number,
+            'available_rooms':userprofile.available_rooms,
+            'description':userprofile.description,
+            'price':userprofile.price,
             })
     except:
         pass
     try:
-        dog_sitter_user = DogSitter.objects.get(user=user)
+        userprofile = DogSitter.objects.get_or_create(user=user)[0]
         profiletype="dog_sitter"
         form = DogSitterForm({
-            'picture':dog_sitter_user.picture,
-            'age':dog_sitter_user.age,
-            'bio':dog_sitter_user.bio,
-            'city': dog_sitter_user.city,
-            'address': dog_sitter_user.address,
-            'phone_number':dog_sitter_user.phone_number,
-            'availability':dog_sitter_user.availability,
-            'price_per_night':dog_sitter_user.price_per_night,
+            'picture':userprofile.picture,
+            'age':userprofile.age,
+            'bio':userprofile.bio,
+            'city': userprofile.city,
+            'address': userprofile.address,
+            'phone_number':userprofile.phone_number,
+            'availability':userprofile.availability,
+            'price_per_night':userprofile.price_per_night,
             })
     except:
         pass
 
     if request.method == 'POST':
         if profiletype=="dog_owner":
-            form = DogOwnerForm(request.POST, request.FILES, instance=dog_owner_user)
+            form = DogOwnerForm(request.POST, request.FILES, instance=userprofile)
         elif  profiletype=="hotel":
-            form = HotelForm(request.POST, request.FILES, instance=hotel_user)
+            form = HotelForm(request.POST, request.FILES, instance=userprofile)
         else:
-            form = DogOwnerForm(request.POST, request.FILES, instance=dog_owner_user)
+            form = DogOwnerForm(request.POST, request.FILES, instance=userprofile)
 
         if form.is_valid():
             form.save(commit=True)

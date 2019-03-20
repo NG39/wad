@@ -3,13 +3,18 @@
 {% block body_block %}
 
 <h2 class="form-signin-heading">Register as a Dog Owner Here</h2>
+{% if registered %}
+  <strong>thank you for registering!</strong>
+   <a href="{% url 'login' %}">Log in </a><br/>
+   {% else %}
+
 <form method="post" novalidate>
   {% csrf_token %}
 
   {% for hidden_field in dog_owner_form.hidden_fields %}
     {{ hidden_field }}
   {% endfor %}
-  
+
   {% if dog_owner_form.non_field_errors %}
   <div class="alert alert-danger" role="alert">
     {% for error in dog_owner_form.non_field_errors %}
@@ -17,8 +22,8 @@
     {% endfor %}
   </div>
 	{% endif %}
-	
-{% for field in user_form.visible_fields%}
+
+{% for field in user_form.visible_fields %}
   <div class="form-group">
     {{ field.label_tag }}
 
@@ -69,4 +74,5 @@
 {% endfor %}
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+{% endif %}
 {% endblock %}
