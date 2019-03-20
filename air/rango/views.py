@@ -191,7 +191,7 @@ def register_hotel(request):
 
 # Render the template depending on the context.
     return render(request,
-        'rango/register_hotel.html',
+        'registration/register_hotel.html',
         {'hotel_form': hotel_form,
         'registered': registered})
 
@@ -243,7 +243,7 @@ def register_sitter(request):
 
 # Render the template depending on the context.
     return render(request,
-        'rango/register_sitter.html',
+        'registration/register_sitter.html',
         {'sitter_form': sitter_form,
         'registered': registered})
 
@@ -295,7 +295,7 @@ def register_dog_owner(request):
 
 # Render the template depending on the context.
     return render(request,
-        'rango/register_dog_owner.html',
+        'registration/register_dog_owner.html',
         {'dog_owner_form': dog_owner_form,
         'registered': registered})
 
@@ -375,7 +375,7 @@ def user_login(request):
 
 # Render the template depending on the context.
     return render(request,
-        'rango/register_dog_owner.html',
+        'registration/register_dog_owner.html',
         {'dog_owner_form': dog_owner_form,
         'registered': registered})
 

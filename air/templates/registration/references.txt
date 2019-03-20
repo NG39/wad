@@ -1,0 +1,3 @@
+codes in register_hotel, register_dog_owner and register_sitter has been taken from the following place
+
+https://simpleisbetterthancomplex.com/article/2017/08/19/how-to-render-django-form-manually.html
