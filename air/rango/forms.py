@@ -3,6 +3,14 @@ from rango.models import Hotel, DogSitter, Dog, DogOwner
 from django.contrib.auth.models import User
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 from phone_field import PhoneField
+
+class UserForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput())
+
+    class Meta:
+        model = User
+        fields = ('username','first_name','last_name', 'email', 'password')
+
 class DogForm(forms.ModelForm):
 
     name = forms.CharField(max_length=Dog.max_length, help_text = "Please enter the name of your dog.")
@@ -18,45 +26,47 @@ class DogForm(forms.ModelForm):
         fields = ('name', 'size', 'age', 'breed', 'special_needs', 'picture', )
 
 class DogOwnerForm(forms.ModelForm):
-    first_name = forms.CharField(max_length=128, help_text = "Please enter your fist name.")
-    last_name = forms.CharField(max_length=128, help_text = "Please enter your fist name.")
-    email = forms.EmailField(max_length=128, help_text = "Please enter your email.")
-    username = forms.CharField(max_length=128, help_text = "Please enter your username.")
-    password = forms.CharField(widget=forms.PasswordInput())
+    #first_name = forms.CharField(max_length=128, help_text = "Please enter your fist name.")
+    #last_name = forms.CharField(max_length=128, help_text = "Please enter your fist name.")
+    #email = forms.EmailField(max_length=128, help_text = "Please enter your email.")
+    #username = forms.CharField(max_length=128, help_text = "Please enter your username.")
+    #password = forms.CharField(widget=forms.PasswordInput())
     phone_number = PhoneField(blank=True, help_text='Contact phone number')
     city = forms.CharField(max_length=128, help_text = "Please enter your city.")
     picture = forms.ImageField(required=False)
 
     class Meta:
         model = DogOwner
-        fields = ('username', 'first_name', 'last_name', 'email', 'password' ,'phone_number', 'city', 'picture', )
+        exclude = ('user',)
+        fields = ('phone_number', 'city', 'picture', )
 
 class HotelForm(forms.ModelForm):
-    first_name = forms.CharField(max_length=128, help_text = "Please enter first name.")
-    last_name = forms.CharField(max_length=128, help_text = "Please enter last name.")
-    email = forms.EmailField(max_length=128, help_text = "Please enter your email.")
-    username = forms.CharField(max_length=128, help_text = "Please enter your username.")
+    #first_name = forms.CharField(max_length=128, help_text = "Please enter first name.")
+#    last_name = forms.CharField(max_length=128, help_text = "Please enter last name.")
+    #email = forms.EmailField(max_length=128, help_text = "Please enter your email.")
+    #username = forms.CharField(max_length=128, help_text = "Please enter your username.")
     hotel_name = forms.CharField(max_length=128, help_text = "Please enter your hotel's name.")
     address = forms.CharField(max_length=128, help_text = "Please enter the hotel's address.")
     city = forms.CharField(max_length=128, help_text = "Please enter the city of your hotel.")
-    picture = forms.ImageField(required=True)
+    picture = forms.ImageField(required=False)
     phone_number = PhoneField(blank=True, help_text='Contact phone number')
     available_rooms = forms.IntegerField()
     description = forms.CharField(max_length = 500)
     price = forms.IntegerField()
-    password = forms.CharField(widget=forms.PasswordInput())
+    #password = forms.CharField(widget=forms.PasswordInput())
 
     class Meta:
         model = Hotel
-        fields = ('username', 'hotel_name',  'first_name', 'last_name', 'email', 'password', 'phone_number', 'address', 'city', 'available_rooms', 'description', 'price', 'picture',)
+        exclude = ('user',)
+        fields = ('hotel_name','phone_number', 'address', 'city', 'available_rooms', 'description', 'price', 'picture',)
 
 
 class DogSitterForm(forms.ModelForm):
-    first_name = forms.CharField(max_length=128, help_text = "Please enter your fist name.")
-    last_name = forms.CharField(max_length=128, help_text = "Please enter your fist name.")
-    email = forms.EmailField(max_length=128, help_text = "Please enter your email.")
-    username = forms.CharField(max_length=128, help_text = "Please enter your username.")
-    dog_preferences = forms.ChoiceField(label="", initial='', widget=forms.Select(), required=True)
+    #first_name = forms.CharField(max_length=128, help_text = "Please enter your fist name.")
+    #last_name = forms.CharField(max_length=128, help_text = "Please enter your fist name.")
+    #email = forms.EmailField(max_length=128, help_text = "Please enter your email.")
+    #username = forms.CharField(max_length=128, help_text = "Please enter your username.")
+    dog_preferences = forms.ChoiceField(choices = [('S', 'Small'), ('M', 'Medium'),('L','Large')],label="Dog Preference:", initial='', widget=forms.Select(), required=True)
     age = forms.IntegerField(required=False)
     picture = forms.ImageField(required=False)
     bio = forms.CharField(max_length = 500, help_text = "Why do you want to be a dogsitter?")
@@ -64,8 +74,9 @@ class DogSitterForm(forms.ModelForm):
     availability = forms.CharField(max_length=128)
     phone_number = PhoneField(blank=True, help_text='Contact phone number')
     city = forms.CharField(max_length=128, help_text = "Please enter the city you live in.")#
-    password = forms.CharField(widget=forms.PasswordInput())
+    #password = forms.CharField(widget=forms.PasswordInput())
 
     class Meta:
         model = DogSitter
-        fields = ('username', 'picture', 'first_name', 'last_name', 'email', 'password', 'dog_preferences', 'age', 'bio', 'price_per_night', 'availability', 'phone_number', 'city', )
+        exclude = ('user',)
+        fields = ('picture','dog_preferences', 'age', 'bio', 'price_per_night', 'availability', 'phone_number', 'city', )

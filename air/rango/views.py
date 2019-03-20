@@ -144,160 +144,118 @@ def get_dogsitter_reservation_dets(request, city_name):
 
 
 def register_hotel(request):
-    # A boolean value for telling the template
-    # whether the registration was successful.
-    # Set to False initially. Code changes value to
-    # True when registration succeeds.
     registered = False
 
-    # If it's a HTTP POST, we're interested in processing form data.
     if request.method == 'POST':
-        # Attempt to grab information from the raw form information.
+        user_form = UserForm(data=request.POST)
         hotel_form = HotelForm(data=request.POST)
 
-        # If the two forms are valid...
-        if hotel_form.is_valid():
-            # Save the user's form data to the database.
-            hotel_user = hotel_form.save()
-
-            # Now we hash the password with the set_password method.
-            # Once hashed, we can update the user object.
-            hotel_user.set_password(user.password)
-            hotel_user.save()
+        if user_form.is_valid() and hotel_form.is_valid():
+            user = user_form.save()
+            user.set_password(user.password)
+            user.save()
+            hotel_user = hotel_form.save(commit=False)
+            hotel_user.user = user
 
 
-            # Did the user provide a profile picture?
-            # If so, we need to get it from the input form and
-             #put it in the UserProfile model.
             if 'picture' in request.FILES:
                 hotel_user.picture = request.FILES['picture']
 
-            # Now we save the UserProfile model instance.
             hotel_user.save()
-
-            # Update our variable to indicate that the template
-            # registration was successful.
             registered = True
         else:
-            # Invalid form or forms - mistakes or something else?
-            # Print problems to the terminal.
-            print(hotel_form.errors)
+
+            print(user_form.errors,hotel_form.errors)
 
     else:
-        # Not a HTTP POST, so we render our form using two ModelForm instances.
-        # These forms will be blank, ready for user input.
+        user_form = UserForm()
         hotel_form = HotelForm()
-
+    ctx = {
+        'user_form': user_form,
+        'hotel_form':hotel_form,
+        'registered': registered}
 
 # Render the template depending on the context.
     return render(request,
         'registration/register_hotel.html',
-        {'hotel_form': hotel_form,
-        'registered': registered})
+        context=ctx)
+
 
 def register_sitter(request):
-    # A boolean value for telling the template
-    # whether the registration was successful.
-    # Set to False initially. Code changes value to
-    # True when registration succeeds.
     registered = False
 
-    # If it's a HTTP POST, we're interested in processing form data.
     if request.method == 'POST':
-        # Attempt to grab information from the raw form information.
-        sitter_form = SitterForm(data=request.POST)
+        user_form = UserForm(data=request.POST)
+        sitter_form = DogSitterForm(data=request.POST)
 
-        # If the two forms are valid...
-        if sitter_form.is_valid():
-            # Save the user's form data to the database.
-            sitter_user = sitter_form.save()
-
-            # Now we hash the password with the set_password method.
-            # Once hashed, we can update the user object.
-            sitter_user.set_password(user.password)
-            sitter_user.save()
+        if user_form.is_valid() and sitter_form.is_valid():
+            user = user_form.save()
+            user.set_password(user.password)
+            user.save()
+            sitter_user = sitter_form.save(commit=False)
+            sitter_user.user = user
 
 
-            # Did the user provide a profile picture?
-            # If so, we need to get it from the input form and
-             #put it in the UserProfile model.
             if 'picture' in request.FILES:
                 sitter_user.picture = request.FILES['picture']
 
-            # Now we save the UserProfile model instance.
             sitter_user.save()
-
-            # Update our variable to indicate that the template
-            # registration was successful.
             registered = True
         else:
-            # Invalid form or forms - mistakes or something else?
-            # Print problems to the terminal.
-            print(sitter_form.errors)
+
+            print(user_form.errors,sitter_form.errors)
 
     else:
-        # Not a HTTP POST, so we render our form using two ModelForm instances.
-        # These forms will be blank, ready for user input.
-        sitter_form = SitterForm()
-
+        user_form = UserForm()
+        sitter_form = DogSitterForm()
+    ctx = {
+        'user_form': user_form,
+        'sitter_form':sitter_form,
+        'registered': registered}
 
 # Render the template depending on the context.
     return render(request,
         'registration/register_sitter.html',
-        {'sitter_form': sitter_form,
-        'registered': registered})
+        context=ctx)
+
 
 def register_dog_owner(request):
-    # A boolean value for telling the template
-    # whether the registration was successful.
-    # Set to False initially. Code changes value to
-    # True when registration succeeds.
     registered = False
 
-    # If it's a HTTP POST, we're interested in processing form data.
     if request.method == 'POST':
-        # Attempt to grab information from the raw form information.
+        user_form = UserForm(data=request.POST)
         dog_owner_form = DogOwnerForm(data=request.POST)
 
-        # If the two forms are valid...
-        if dog_owner_form.is_valid():
-            # Save the user's form data to the database.
-            dog_owner_user = dog_owner_form.save()
-
-            # Now we hash the password with the set_password method.
-            # Once hashed, we can update the user object.
-            dog_owner_user.set_password(user.password)
-            dog_owner_user.save()
+        if user_form.is_valid() and dog_owner_form.is_valid():
+            user = user_form.save()
+            user.set_password(user.password)
+            user.save()
+            dog_owner_user = dog_owner_form.save(commit=False)
+            dog_owner_user.user = user
 
 
-            # Did the user provide a profile picture?
-            # If so, we need to get it from the input form and
-             #put it in the UserProfile model.
             if 'picture' in request.FILES:
                 dog_owner_user.picture = request.FILES['picture']
 
-            # Now we save the UserProfile model instance.
             dog_owner_user.save()
-
-            # Update our variable to indicate that the template
-            # registration was successful.
             registered = True
         else:
-            # Invalid form or forms - mistakes or something else?
-            # Print problems to the terminal.
-            print(dog_owner_form.errors)
+
+            print(user_form.errors,dog_owner_form.errors)
 
     else:
-        # Not a HTTP POST, so we render our form using two ModelForm instances.
-        # These forms will be blank, ready for user input.
+        user_form = UserForm()
         dog_owner_form = DogOwnerForm()
-
+    ctx = {
+        'user_form': user_form,
+        'dog_owner_form':dog_owner_form,
+        'registered': registered}
 
 # Render the template depending on the context.
     return render(request,
         'registration/register_dog_owner.html',
-        {'dog_owner_form': dog_owner_form,
-        'registered': registered})
+        context=ctx)
+
 
 ''' # FIXME:  on click  not with city name arg
 def get_hotel_profile(request, city_name):
