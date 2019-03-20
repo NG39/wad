@@ -11,7 +11,7 @@ from django.utils import timezone
 
 
 def homepage(request):
-    return HttpResponse("<a href='/rango'>Welcome to AirbnBark</href>")
+    return render(request, 'rango/index.html', {})
 
 
 def get_hotel_list(city_name,max_results=0,):#city_name is the city searched for
@@ -47,7 +47,7 @@ def search(request):
             result_list = get_hotel_list(city_name)
         if choice=="dogsitters":
             result_list = get_dogsitter_list(city_name)
-    return render(request, 'rango/search.html', {'result_list': result_list, 'search_query': query})
+    return render(request, 'rango/search.html', {'result_list': result_list, 'search':choice,'search_query': query})
 
 
 
