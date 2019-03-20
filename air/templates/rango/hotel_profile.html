@@ -1,0 +1,79 @@
+{% extends 'rango/base.html' %}
+{% load staticfiles %}
+{% block title %}{{ hotel_user.username }} Profile {% endblock %}
+{% block body_block %}
+
+	<style>
+        .profile-img {
+            object-fit: contain;
+            border-radius: 10px;
+            width: 100%;
+            height: auto;
+            min-height: 150px;
+            min-width: 100px;
+            max-height: 200px;
+            max-width: 200px;
+            background-color: #3d3d3d;
+        }
+        .profile-row {
+            background-color: rgba(0,0,0,0.05);
+            padding: 10px;
+            margin: 20px;
+            border-radius: 20px;
+        }
+        .left {
+            width: 15%;
+        }
+        .right {
+            width: 85%;
+            padding-left: 30px;
+        }
+	</style>
+	{% if selecteduser.username == user.username %}
+		<h1>{{ selecteduser.username }}'s Profile</h1>
+		<div class="row profile-row">
+       		<div class="left">
+            	{% if userprofile.picture %}
+                	<img src="{{ MEDIA_URL }}{{ userprofile.picture }}"
+                     	alt="{{ selecteduser.username }}" class="profile-img"/>
+            	{% else %}
+                	<img src="{% static 'images/rango.jpg' %}" class="profile-img" alt="temporary profile pic"/>
+            	{% endif %}
+        	</div>
+        	<div class="right">
+                	<form method="post" action="." enctype="multipart/form-data">
+                    	{% csrf_token %}
+                    	{{ form.as_p }}
+                    	<input class="btn btn-primary" type="submit" value="Update"/>
+                	</form>
+            </div>
+        </div>
+    {% else %}
+    	<h1> {{ title }}'s Profile </h1>
+    	<div class="row profile-row">
+       		<div class="left">
+            	{% if userprofile.picture %}
+                	<img src="{{ MEDIA_URL }}{{ userprofile.picture }}"
+                     	alt="{{ selecteduser.username }}" class="profile-img"/>
+            	{% else %}
+                	<img src="{% static 'images/rango.jpg' %}" class="profile-img" alt="temporary profile pic"/>
+            	{% endif %}
+        	</div>
+        	<div class="right">
+            		<p>
+            			{% for field in form %}
+            				{% if not field.label == "picture" %}
+            					<strong> {{ field.label }}: </strong> {{ field.value }}
+                    			<br/>
+                    		{% endif %}
+                    	{% endfor %}
+                	</p>
+        	</div>
+    	<div id="edit_profile"></div>
+
+    	</div>
+
+    	<br/>
+
+
+{% endblock %}
