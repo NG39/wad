@@ -426,7 +426,7 @@ def profile(request, username):
             form = DogOwnerForm(request.POST, request.FILES, instance=userprofile)
             formdog = DogForm(request.POST, request.FILES, instance=userprofile)
             
-            context_dict = dog_list {'title':title, 'userprofile': userprofile, 'selecteduser': user,'dogprofilelist': dogprofilelist,'form': form }
+            context_dict ={'title':title, 'userprofile': userprofile, 'selecteduser': user,'dogprofilelist': dogprofilelist,'form': form }
             
         elif  profiletype=="hotel":
             form = HotelForm(request.POST, request.FILES, instance=userprofile)
