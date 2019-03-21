@@ -1,9 +1,9 @@
 {% extends 'rango/base.html' %}
 {% load staticfiles %}
-{% block title %}{{ selecteduser.username }} Profile{% endblock %}
+{% block title %}{{ selecteduser.username }} Profile {% endblock %}
 {% block body_block %}
 
-    <style>
+	<style>
         .profile-img {
             object-fit: contain;
             border-radius: 10px;
@@ -28,45 +28,95 @@
             width: 85%;
             padding-left: 30px;
         }
-    </style>
+	</style>
+	{% if selecteduser.username == user.username %}
+		<h1>{{ selecteduser.username }}'s Profile</h1>
+		<div class="row profile-row">
+       		<div class="left">
+            	{% if userprofile.picture %}
+                	<img src="{{ MEDIA_URL }}{{ userprofile.picture }}"
+                     	alt="{{ selecteduser.username }}" class="profile-img"/>
+            	{% else %}
+                	<img src="{% static 'images/rango.jpg' %}" class="profile-img" alt="temporary profile pic"/>
+            	{% endif %}
 
-    <h1>{{ selecteduser.username }}'s Profile</h1>
-    <div class="row profile-row">
-        <div class="left">
-            {% if userprofile.picture %}
-                <img src="{{ MEDIA_URL }}{{ userprofile.picture }}"
-                     alt="{{ selecteduser.username }}" class="profile-img"/>
-            {% else %}
-                <img src="http://lorempixel.com/400/200" class="profile-img"/>
-            {% endif %}
-        </div>
-        <div class="right">
-            {% if selecteduser.username == user.username %}
-                <form method="post" action="." enctype="multipart/form-data">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <input class="btn btn-primary" type="submit" value="Update"/>
-                </form>
-            {% else %}
-                <p>
-                    <strong>Website:</strong>
-                    <a href="{{ userprofile.website }}">{{ userprofile.website }}</a>
-                    <br/>
-                    <strong>Joined:</strong> {{ userprofile.user.date_joined }}
-                    <br/>
-                    <strong>Last logged in:</strong> {{ userprofile.user.last_login }}
-                    <br/>
-                    <strong>Is staff:</strong> {{ userprofile.user.is_staff }}
-                    <br/>
-                </p>
-            {% endif %}
-        </div>
-    <div id="edit_profile"></div>
+        	</div>
+        	<div class="right">
+                	<form method="post" action="." enctype="multipart/form-data">
+                    	{% csrf_token %}
+                    	{{ form.as_p }}
+                    	<input class="btn btn-primary" type="submit" value="Update"/>
+                	</form>
+            </div>
         </div>
 
-    </div>
+	<div>
+		{% if dogprofilelist %}
+			<h1>{{ selecteduser.username }}'s Dogs</h1>
+			<ul>
+			{% for r in dogprofilelist %}
 
-    <br/>
+				<li> 
+				<strong> Dog name: </strong> {{r.name}}
+				</li>  
+
+			{% endfor %}
+			</ul>
+
+			{% else %}
+				<strong> No dogs found </strong>
+		{% endif %}
+	</div>
+
+    {% else %}
+    	<h1> {{ title }}'s Profile </h1>
+    	<div class="row profile-row">
+       		<div class="left">
+            	{% if userprofile.picture %}
+                	<img src="{{ MEDIA_URL }}{{ userprofile.picture }}"
+                     	alt="{{ selecteduser.username }}" class="profile-img"/>
+            	{% else %}
+                	<img src="{% static 'images/rango.jpg' %}" class="profile-img" alt="temporary profile pic"/>
+            	{% endif %}
+        	</div>
+        	<div class="right">
+
+            	{% for field in form %}
+                 	 <p>
+            		{% if not field.label == "picture" %}
+            			<strong> {{ field.label }}: </strong> {{ field.value }}
+                    		<br/>
+
+                    	{% endif %}
+                   	 </p>
+                {% endfor %}
+
+        	</div>
+    	<div id="edit_profile"></div>
+	
+	<div>
+		{% if dogprofilelist %}
+			<h1>{{ selecteduser.username }}'s Dogs</h1>
+			<ul>
+			{% for r in dogprofilelist %}
+
+				<li> 
+				<strong> Dog name: </strong> {{r.name}}
+				</li>  
+
+			{% endfor %}
+			</ul>
+
+		{% else %}
+			<strong> No dogs found </strong>
+		{% endif %}
+	</div>
+
+
+  	{% endif %}
+    	</div>
+
+    	<br/>
 
 
 {% endblock %}
