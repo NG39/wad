@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load widget_tweaks %}
 {% load staticfiles %}
 {% load rango_template_tags %}
 
@@ -6,124 +7,120 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,
-initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="{% static 'images/favicon.ico' %}">
     <title>
-        Rango - {% block title %}How to Tango with Django!{% endblock %}
+       {% block title %} AirBnBark{% endblock %}
     </title>
-    <!-- Bootstrap core CSS -->
-    <link href="http://v4-alpha.getbootstrap.com/dist/css/bootstrap.min.css"
-          rel="stylesheet">
-    <!-- Custom styles for this template -->
-    <link href=
-                  "http://v4-alpha.getbootstrap.com/examples/dashboard/dashboard.css"
-          rel="stylesheet">
-    <script
-            src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js">
-    </script>
+    
+    <!-- Bootstrap Core CSS -->
+    <link href="/templates/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS: You can use this stylesheet to override any Bootstrap styles and/or apply your own styles -->
+    <link href="/templates/css/custom.css" rel="stylesheet">
+    
+    <!-- FontAwesome for the dog icon -->
+    <link href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' rel="stylesheet" crossorigin="anonymous">
+    
+    <!-- Custom Fonts from Google -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
     <script src="{% static "js/rango-jquery.js" %}"></script>
     <script src="{% static "js/rango-ajax.js" %}"></script>
-    <style>
-        .suggestion {
-            width: 80%;
-            margin: 0 auto;
-        }
-    </style>
+    
 </head>
-<body>
-<nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
-    <button class="navbar-toggler navbar-toggler-right hidden-lg-up"
-            type="button"
-            data-toggle="collapse"
-            data-target="#navbar"
-            aria-controls="navbar"
-            aria-expanded="false"
-            aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <a class="navbar-brand" href="{% url 'index' %}">Rango</a>
-    <div class="collapse navbar-collapse" id="navbar">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'index' %}">
-                    Home
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'about' %}">
-                    About
-                </a>
-            </li>
-            {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'restricted' %}">
-                        Restricted Page
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'add_category' %}">
-                        Add a New Category
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'profile' user.username %}">Profile</a>
-                </li>
-                <div class="nav-item">
-                    <a class="nav-link" href="{% url 'list_profiles' %}">List Profiles</a>
-                </div>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'auth_logout' %}?next=/rango/">
-                        Logout
-                    </a>
-                </li>
-            {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'registration_register' %}">
-                        Register Here
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'auth_login' %}">
-                        Login
-                    </a>
-                </li>
-            {% endif %}
+<body>
+ <nav id="siteNav" class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Logo and responsive toggle -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{% url 'index' %}">
+                	<i class="fas fa-paw"></i> 
+                	AIRBNBARK
+                </a>
+            </div>
+    <div class="collapse navbar-collapse" id="navbar">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="active">
+                        <a href="{% url 'index' %}">Home</a>
+                    </li>
+
+                {% if user.is_authenticated %}
+                	<li class="nav-item">
+                    	<a class="nav-link" href="{% url 'profile' user.username %}">Profile</a>
+                	</li>
+					<li class="nav-item">
+                    	<a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                	</li>
+                
+                {% else %}
+                	<li class="nav-item">
+                    	<a class="nav-link" href="{% url 'register_hotel' %}">Register a Hotel</a>
+                	</li>
+                	<li class="nav-item">
+                    	<a class="nav-link" href="{% url 'register_sitter' %}">Register as a DogSitter</a>
+                	</li>
+                	<li class="nav-item">
+                    	<a class="nav-link" href="{% url 'register_dog_owner' %}">Register as a DogOwner</a>
+                	</li>
+                	<li class="nav-item">
+                    	<a class="nav-link" href="{% url 'login' %}">Login</a>
+                	</li>
+                {% endif %}
         </ul>
+        
+    </div>
     </div>
 </nav>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
-            <ul class="nav nav-list flex-column">
-                <form>
-                    <li class="nav-item"><input class="search-query form-control suggestion" type="text"
-                                                name="suggestion" value="" id="suggestion" placeholder="Find a category""/>
-                    </li>
-                </form>
-            </ul>
-            <div id="cats">
-            </div>
-            <h5 style="text-align: center">Pages:</h5>
-            {% block sidebar_block %}
-                {% get_category_list category %}
-            {% endblock %}
+            {% block body_block %}
+			{% endblock %}
+
+	<footer class="page-footer">
+    
+    	<!-- Contact Us -->
+        <div class="contact">
+        	<div class="container">
+				<h2 class="section-heading">Contact Us</h2>
+				<p><span class="glyphicon glyphicon-earphone"></span><br> +1(23) 456 7890</p>
+				<p><span class="glyphicon glyphicon-envelope"></span><br> airbnbark@yaydogs.co.uk</p>
+        	</div>
         </div>
-        <div class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 main">
-            <br/>
-            {% block body_block %}{% endblock %}
+        	
+        <!-- Copyright etc -->
+        <div class="small-print">
+        	<div class="container">
+        		<p>Copyright &copy; Example.com 2019</p>
+        	</div>
         </div>
-    </div>
-</div>
+        
+	</footer>
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script src="http://v4-alpha.getbootstrap.com/dist/js/bootstrap.min.js"></script>
-<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="http://v4-alpha.getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
+	<!-- jQuery -->
+    <script src="/templates/js/jquery-1.11.3.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/templates/js/bootstrap.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="/templates/js/jquery.easing.min.js"></script>
+    
+    <!-- Custom Javascript -->
+    <script src="/templates/js/custom.js"></script>
+
+	<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+	<script src="http://v4-alpha.getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
+	
 </body>
 </html>
