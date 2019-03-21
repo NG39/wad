@@ -3,24 +3,28 @@ from rango import views
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
-    url(r'^about/$', views.about, name='about'),
-    url(r'^add_category/$', views.add_category, name='add_category'),
-    url(r'^category/(?P<category_name_slug>[\w\-]+)/$', views.show_category, name='show_category'),
-    url(r'^category/(?P<category_name_slug>[\w\-]+)/add_page/$', views.add_page, name='add_page'),
 
-    url(r'^register/$', views.register, name='register'),
+
+    #FIXME put regsiter link on top of base
+    url(r'^register_dog_owner/$', views.register_dog_owner, name='register_dog_owner'),
+    url(r'^register_hotel/$', views.register_hotel, name='register_hotel'),
+    url(r'^register_sitter/$', views.register_sitter, name='register_sitter'),
     url(r'^login/$', views.user_login, name='login'),
     url(r'^logout/$', views.user_logout, name='logout'),
-    url(r'^restricted/', views.restricted, name='restricted'),
+    url(r'^delete/(?P<username_slug>[\w|\W.-]+)/$', views.user_deactivate, name='deactivate_user'),
+    url(r'^about/$', views.about, name='about'),
 
-    url(r'^search/$', views.search, name='search'),
 
-    url(r'^goto/', views.track_url, name='goto'),
     url(r'^profile/(?P<username>[\w\-]+)/$', views.profile, name='profile'),
-    url(r'^profiles/$', views.list_profiles, name='list_profiles'),
-    url(r'^register_profile/$', views.register_profile, name='register_profile'),
+    #those are the profile pages if u are a hotel owner dog owner or dogsitter  PERSONAL PAGES
+    #url(r'^hot_detail/(?P<username_slug>[\w\-]+)/$', views.profile_load, name='get_hotel_profile'),
+    #url(r'^sitter_detail/(?P<username_slug>[\w\-]+)/$', views.profile_load, name='get_dogsitter_profile'),
+    #url(r'^dog_owner_detail/(?P<username_slug>[\w\-]+)/$', views.profile_load, name='get_dog_owner_profile'),
+    url(r'^search/$', views.search, name='search'),
+    #search result pages for all types of users
+    url(r'^hotel/(?P<username_slug>[\w\-]+)/$', views.show_hotel, name='show_hotel'),# username of the hotel
+    url(r'^dogsitter/(?P<username_slug>[\w\-]+)/$', views.show_dogsitter, name='show_dogsitter'),#username for dogsitter
 
-    url(r'^like/$', views.like_category, name='like_category'),
-    url(r'^suggest/$', views.suggest_category, name='suggest_category'),
-    url(r'^add/$', views.auto_add_page, name='auto_add_page'),
+    url(r'^add_dog/$', views.add_dog, name='add_dog'),
+
 ]
