@@ -37,9 +37,11 @@
                 <br/>
 				<ul class="nav nav-list flex-column">
 					 <form action="/search/" method="get">
-					<input name="query" type="text" placeholder="Search location">
-					<input type="radio" form="radiobuttons" name="choice" id="c1" value="hotels" checked="checked" >Hotels</br>
-					<input type="radio" form="radiobuttons" name="choice" id="c2" value="dogsitters" >Dogsitters</br>
+					<input name="query" type="text" placeholder="Search location"></br>
+					<select name="choice">
+						<option value="hotels">Hotels</option>
+						<option value="dogsitters">Dogsitters</option>
+					</select>
 					<input value="Search" type="submit">
 					</form>
 

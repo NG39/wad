@@ -1,0 +1,37 @@
+{% extends 'rango/base.html' %}
+{% load staticfiles %}
+{% block title %}
+{% endblock %}
+{% block body_block %}
+
+<style>
+        r.picture {
+            object-fit: contain;
+            border-radius: 10px;
+            width: 100%;
+            height: auto;
+            min-height: 150px;
+            min-width: 100px;
+            max-height: 200px;
+            max-width: 200px;
+            background-color: #3d3d3d;
+        }
+</style>
+
+<h1> Results for {{ search }}'s in {{ query }}:  </h1>
+<div class="container-fluid">
+	{% if result_list %}
+		<ul>
+		{% for r in result_list %}
+
+			<li> 
+			<img src="{{ MEDIA_URL }}{{ r.picture }}"alt="{{ r.name }}" class="profile-img"/> <strong> Hotel name:</strong> {{ r.name}} <strong>Hotel price:</strong> {{ r.price }} <strong> <a href="/profile/r.user.username"> See details </strong>
+			</li>  
+
+		{% endfor %}
+		</ul>
+	{% else %}
+		<strong> No results found</strong>
+	{% endif %}
+</div>
+{% endblock %}
