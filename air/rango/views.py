@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from rango.models import *
 from rango.forms import *
+from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
@@ -257,36 +258,6 @@ def register_dog_owner(request):
         context=ctx)
 
 
-''' # FIXME:  on click  not with city name arg
-def get_hotel_profile(request, city_name):
-    hot = Hotel.objects.get(city=city_name)
-    context = {
-        ##what we want to be displayed##
-        'name': hot.name,
-        'description': hot.description,
-    }
-    return render(request, "rango/hot_detail.html", context)
-
- # FIXME:  on click  not with city name arg get profile page if u are a dogsitter
-def get_dogsitter_profile(request, city_name):
-    sitter = DogSitter.objects.get(city=city_name)
-    context = {
-        ##what we want to be displayed##
-        'name': sitter.name,
-        'description': sitter.description,
-    }
-    return render(request, "rango/sitter_detail.html", context)
-
- # FIXME:  get the profilepage when u are a dog owner
-def get_dog_owner_profile(request):
-    owner = DogOwner.objects.getall()
-    context = {
-        ##what we want to be displayed##
-        'name': owner.name,
-        'description': owner.description,
-    }
-    return render(request, "rango/dog_owner_detail.html", context)
-'''
 def add_dog(request):
     form = AddDogForm()
 
@@ -362,12 +333,13 @@ def profile(request, username):
     profiletype=""
     userprofile= None
     form=None
+    user=None
     try:
         user = User.objects.get(username=username)
 
     except User.DoesNotExist:
         return redirect('index')
-    title = user.first_name + " "+ user.last_name
+    title = " ".join((user.first_name, user.last_name))
     try:
         userprofile = DogOwner.objects.get_or_create(user=user)[0]
 
@@ -378,12 +350,11 @@ def profile(request, username):
             'city': userprofile.city,
             })
     except:
-        pass
-    try:
-        userprofile = Hotel.objects.get_or_create(user=user)[0]
-        profiletype="hotel"
-        title = userprofile.hotel_name
-        form = HotelForm({
+        try:
+            userprofile = Hotel.objects.get_or_create(user=user)[0]
+            profiletype="hotel"
+            title = userprofile.hotel_name
+            form = HotelForm({
 
             'picture':userprofile.picture,
             'city': userprofile.city,
@@ -393,23 +364,23 @@ def profile(request, username):
             'description':userprofile.description,
             'price':userprofile.price,
             })
-    except:
-        pass
-    try:
-        userprofile = DogSitter.objects.get_or_create(user=user)[0]
-        profiletype="dog_sitter"
-        form = DogSitterForm({
-            'picture':userprofile.picture,
-            'age':userprofile.age,
-            'bio':userprofile.bio,
-            'city': userprofile.city,
-            'address': userprofile.address,
-            'phone_number':userprofile.phone_number,
-            'availability':userprofile.availability,
-            'price_per_night':userprofile.price_per_night,
-            })
-    except:
-        pass
+        except:
+            try:
+                userprofile = DogSitter.objects.get_or_create(user=user)[0]
+                profiletype="dog_sitter"
+                form = DogSitterForm({
+                'picture':userprofile.picture,
+                'age':userprofile.age,
+                'bio':userprofile.bio,
+                'city': userprofile.city,
+                'address': userprofile.address,
+                'phone_number':userprofile.phone_number,
+                'availability':userprofile.availability,
+                'price_per_night':userprofile.price_per_night,
+                        })
+            except:
+                pass
+
 
     if request.method == 'POST':
         if profiletype=="dog_owner":
@@ -417,7 +388,7 @@ def profile(request, username):
         elif  profiletype=="hotel":
             form = HotelForm(request.POST, request.FILES, instance=userprofile)
         else:
-            form = DogOwnerForm(request.POST, request.FILES, instance=userprofile)
+            form = DogSitterForm(request.POST, request.FILES, instance=userprofile)
 
         if form.is_valid():
             form.save(commit=True)
@@ -430,54 +401,3 @@ def profile(request, username):
 
     return render(request, 'rango/profile.html', {'title':title,
             'userprofile': userprofile, 'selecteduser': user, 'form': form})
-
-
-
-
-"""
-## version one
-def profile_load(request, username):
-    context_dict = {}
-
-    try:
-        hot = Hotel.objects.get(username=username)
-        ##add context dict
-
-
-        return  render(request, "rango/hot_detail.html", context)
-    except:
-        try:
-            ds = DogSitter.objects.get(username=username)
-
-
-
-            return  render(request, "rango/sitter_detail.html", context)
-        except:
-            try:
-                do = DogOwner.objects.get(username=username)
-
-
-
-                return  render(request, "rango/dog_owner_detail.html", context)
-            except:
-                return render(reverse(index))
-"""
-##version 2
-"""
-def profile_load(request, username):
-    context_dict = {}
-
-    try:
-        user = User.objects.get(username=username)
-        if user instance of Hotel:
-
-            return  render(request, "rango/hot_detail.html", context)
-        elif user instance of DogSitter:
-            ds = DogSitter.objects.get(username=username)
-            return  render(request, "rango/sitter_detail.html", context)
-        elif user instance of DogOwner:
-            owner = DogOwner.objects.get(username=username)
-            return  render(request, "rango/dog_owner_detail.html", context)
-        else:
-            return render(reverse(index))
-"""

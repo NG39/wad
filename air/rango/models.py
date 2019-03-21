@@ -52,7 +52,7 @@ class DogSitter(models.Model):
     picture = models.ImageField(upload_to='Sitter_images', blank=True)
     bio = models.CharField(max_length = 500)
     price_per_night = models.IntegerField()
-    availablity = models.CharField(max_length=128)
+    availability  = models.CharField(max_length=128)
     phone_number = PhoneField(blank=True, help_text='Contact phone number')
     city = models.CharField(max_length=128)
     slug = models.SlugField()

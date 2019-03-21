@@ -26,11 +26,7 @@ class DogForm(forms.ModelForm):
         fields = ('name', 'size', 'age', 'breed', 'special_needs', 'picture', )
 
 class DogOwnerForm(forms.ModelForm):
-    #first_name = forms.CharField(max_length=128, help_text = "Please enter your fist name.")
-    #last_name = forms.CharField(max_length=128, help_text = "Please enter your fist name.")
-    #email = forms.EmailField(max_length=128, help_text = "Please enter your email.")
-    #username = forms.CharField(max_length=128, help_text = "Please enter your username.")
-    #password = forms.CharField(widget=forms.PasswordInput())
+
     phone_number = PhoneField(blank=True, help_text='Contact phone number')
     city = forms.CharField(max_length=128, help_text = "Please enter your city.")
     picture = forms.ImageField(required=False)
@@ -39,6 +35,8 @@ class DogOwnerForm(forms.ModelForm):
         model = DogOwner
         exclude = ('user',)
         fields = ('phone_number', 'city', 'picture', )
+
+
 
 class HotelForm(forms.ModelForm):
     #first_name = forms.CharField(max_length=128, help_text = "Please enter first name.")
