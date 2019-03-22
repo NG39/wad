@@ -359,22 +359,26 @@ def user_deactivate(request, username):
 
 
 def get_dog_owner(user):
-    doginfo = None
     DogOwner.objects.get(user=user)
     userprofile = DogOwner.objects.get_or_create(user=user)[0]
-    fields = ("Contact(phone number):\n"+userprofile.phone_number,"City:\n"+userprofile.city)
-
-    if(username.dog!=null):
+    fields = (
+    "Name:\n"+ userprofile.user.first_name,
+    " " + userprofile.user.last_name,
+    "\nCity:\n"+userprofile.city)
+    try:
+        userprofile.get_dog_name()
         doginfo = (
         "Name:\n"+userprofile.name,
-        "Breed:\n"+userprofile.breed,
-        "Size:\n"+userprofile.size,
-        "Age:\n"+userprofile.age,
-        "Special needs:\n"+userprofile.special_needs
+        "\nBreed:\n"+userprofile.breed,
+        "\nSize:\n"+str(userprofile.size),
+        "\nAge:\n"+str(userprofile.age),
+        "\nSpecial needs:\n"+userprofile.special_needs
 
         )
+    except:
+        doginfo = None
 
-    return ("dog_owner",userprofile, fields,doginfo )
+    return (userprofile, fields, doginfo )
 
 
 def get_hotel(user):
@@ -385,41 +389,47 @@ def get_hotel(user):
     "Description:\n"+userprofile.description,
     "Adress:\n"+userprofile.address,
     "City:\n"+userprofile.city,
-    "Number of available rooms:\n"+userprofile.available_rooms,
-    "Price in pounds:\n"+userprofile.price_pounds,
-    "Contact(phone number):\n"+userprofile.phone_number)
-    return ("hotel",userprofile, fields,title)
+    "Number of available rooms:\n"+str(userprofile.available_rooms),
+    "Price in pounds:\n"+str(userprofile.price_pounds),)
+    return (userprofile, fields,title)
 
 def get_dog_sitter(user):
-    a= DogSitter.objects.get(user=user)
+    DogSitter.objects.get(user=user)
     userprofile = DogSitter.objects.get_or_create(user=user)[0]
-    fields=(userprofile.first_name(),
-    userprofile.last_name(),
-    userprofile.age, userprofile.bio,userprofile.city, userprofile.availability, userprofile.price_per_night)
-    return ("dog_sitter",userprofile,fields)
+    fields=("Name:\n"+userprofile.first_name(),
+    " " +userprofile.last_name(),
+    "\nAge:\n"+str(userprofile.age),
+    "\nBio:\n"+ userprofile.bio,
+    "\nCity:\n"+userprofile.city,
+    "\nAvailability:\n"+ userprofile.availability,
+    "\nPrice per night per dog:\n"+ str(userprofile.price_per_night))
+    return (userprofile,fields)
 
 
 @login_required
 def profile(request, username):
-    type=""
     form=None
     ct= {}
     try:
         user = User.objects.get(username=username)
     except User.DoesNotExist:
         return redirect('index')
-    title = user.first_name + " "+ user.last_name
+    title = user.first_name + " " + user.last_name
     try:
-        type,userprofile,form,dog = get_dog_owner(user)
+        userprofile,fields,doginfo = get_dog_owner(user)
+        type = "dog_owner"
+        print(type)
     except:
         try:
-            type,userprofile,fields = get_dog_sitter(user)
+            userprofile,fields = get_dog_sitter(user)
+            type = "dog_sitter"
         except:
             try:
-                type,userprofile,form,title = get_hotel(user)
+                userprofile,fields,title = get_hotel(user)
+                type = "hotel"
             except:
                 pass
-    #type,userprofile,form = get_dog_sitter(user)
+    #type,userprofile,fields,doginfo = get_dog_owner(user)
     if type=="dog_owner":
         form = DogOwnerForm(request.POST, request.FILES, instance=userprofile)
 
@@ -435,5 +445,5 @@ def profile(request, username):
         else:
             print(form.errors)
 
-    return render(request, 'rango/profile.html', {"fields":fields, 'title':title,
+    return render(request, 'rango/profile.html', {"type":type, "fields":fields, 'title':title,
             'userprofile': userprofile, 'selecteduser': user, 'form': form})

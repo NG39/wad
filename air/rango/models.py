@@ -22,21 +22,19 @@ class Dog(models.Model):
 class DogOwner(models.Model):
     user = models.OneToOneField(User)
     picture = models.ImageField(upload_to='profile_images', blank=True)
-    #phone_number = PhoneField(blank=True, help_text='Contact phone number')
-    city = models.CharField(max_length=128)
+    city = models.CharField(max_length = 128)
     dog = models.ForeignKey(Dog, on_delete=models.CASCADE, null= True,blank=True)
+
+    def get_dog_name(self):
+        return self.dog.name
 
     def first_name(self):
         return self.user.first_name
+
     def last_name(self):
         return self.user.last_name
-
-    def city(self):
-        return self.city
-
     def __str__(self):
 	       return self.user.username
-
 
 
 

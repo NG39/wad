@@ -32,7 +32,7 @@ class DogOwnerForm(forms.ModelForm):
     #username = forms.CharField(max_length=128, help_text = "Please enter your username.")
     #password = forms.CharField(widget=forms.PasswordInput())
     #phone_number = PhoneField(blank=True, help_text='Contact phone number')
-    city = forms.CharField(required=False,max_length=128, help_text = "Please enter your city.")
+    city = forms.CharField(required=True,max_length=128, help_text = "Please enter your city.")
     picture = forms.ImageField(required=False)
 
     class Meta:
