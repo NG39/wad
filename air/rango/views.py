@@ -360,10 +360,11 @@ def user_deactivate(request, username):
 
 def get_dog_owner(user):
     DogOwner.objects.get(user=user)
-    userprofile = DogOwner.objects.get_or_create(user=user)[0]
+    userprofile = DogOwner.objects.update_or_create(user=user)[0]
     fields = (
-    "Name:\n"+ userprofile.user.first_name,
+    "Name:\n"+ userprofile.user.first_name+
     " " + userprofile.user.last_name,
+    "\nEmail:\n"+userprofile.email(),
     "\nCity:\n"+userprofile.city)
     try:
         userprofile.get_dog_name()
@@ -382,27 +383,32 @@ def get_dog_owner(user):
 
 
 def get_hotel(user):
+
+
     Hotel.objects.get(user=user)
-    userprofile = Hotel.objects.get_or_create(user=user)[0]
+    userprofile = Hotel.objects.update_or_create(user=user)[0]
     title = userprofile.hotel_name
     fields = (
     "Description:\n"+userprofile.description,
     "Adress:\n"+userprofile.address,
     "City:\n"+userprofile.city,
+    "Email:\n"+userprofile.email(),
     "Number of available rooms:\n"+str(userprofile.available_rooms),
     "Price in pounds:\n"+str(userprofile.price_pounds),)
     return (userprofile, fields,title)
 
 def get_dog_sitter(user):
     DogSitter.objects.get(user=user)
-    userprofile = DogSitter.objects.get_or_create(user=user)[0]
-    fields=("Name:\n"+userprofile.first_name(),
+    userprofile = DogSitter.objects.update_or_create(user=user)[0]
+    fields=("Name:\n"+userprofile.first_name()+
     " " +userprofile.last_name(),
+    "\nEmail:\n"+str(userprofile.user.email),
     "\nAge:\n"+str(userprofile.age),
     "\nBio:\n"+ userprofile.bio,
     "\nCity:\n"+userprofile.city,
     "\nAvailability:\n"+ userprofile.availability,
-    "\nPrice per night per dog:\n"+ str(userprofile.price_per_night))
+    "\nPrice per night per dog:\n"+ str(userprofile.price_per_night),
+    )
     return (userprofile,fields)
 
 
@@ -429,9 +435,9 @@ def profile(request, username):
                 type = "hotel"
             except:
                 pass
-    #type,userprofile,fields,doginfo = get_dog_owner(user)
     if type=="dog_owner":
-        form = DogOwnerForm(request.POST, request.FILES, instance=userprofile)
+
+        form = DogOwnerForm(request.POST,  request.FILES, instance=userprofile)
 
     elif type=="hotel":
         form = HotelForm(request.POST, request.FILES, instance=userprofile)
@@ -440,10 +446,17 @@ def profile(request, username):
 
     if request.method == 'POST':
         if form.is_valid():
-            form.save(commit=True)
+            user = User.objects.get(username=username)
+            userprofile = form.save(commit=False)
+            userprofile.user = user
+
+            if 'picture' in request.FILES:
+                userprofile.picture = request.FILES['picture']
+
+            form.save()
             return redirect('profile', user.username)
         else:
             print(form.errors)
 
-    return render(request, 'rango/profile.html', {"type":type, "fields":fields, 'title':title,
+    return render(request, 'rango/profile.html', {'type':type, "fields":fields, 'title':title,
             'userprofile': userprofile, 'selecteduser': user, 'form': form})

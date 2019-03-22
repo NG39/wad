@@ -1,0 +1,47 @@
+{% extends "rango/base.html" %}
+{% load widget_tweaks %}
+{% block body_block %}
+
+<h2 class="form-signin-heading">Register as a Hotel Here</h2>
+<form method="post" novalidate>
+  {% csrf_token %}
+
+  {% for hidden_field in hotel_form.hidden_fields %}
+    {{ hidden_field }}
+  {% endfor %}
+
+  {% if hotel_form.non_field_errors %}
+  <div class="alert alert-danger" role="alert">
+    {% for error in hotel_form.non_field_errors %}
+      {{ error }}
+    {% endfor %}
+  </div>
+	{% endif %}
+
+{% for field in hotel_form.visible_fields %}
+  <div class="form-group">
+    {{ field.label_tag }}
+
+    {% if hotel_form.is_bound %}
+      {% if field.errors %}
+        {% render_field field class="form-control is-invalid" %}
+        {% for error in field.errors %}
+          <div class="invalid-feedback">
+            {{ error }}
+          </div>
+        {% endfor %}
+      {% else %}
+        {% render_field field class="form-control is-valid" %}
+      {% endif %}
+    {% else %}
+      {% render_field field class="form-control" %}
+    {% endif %}
+
+    {% if field.help_text %}
+      <small class="form-text text-muted">{{ field.help_text }}</small>
+    {% endif %}
+  </div>
+{% endfor %}
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}

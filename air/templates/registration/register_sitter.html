@@ -1,0 +1,78 @@
+{% extends "rango/base.html" %}
+{% load widget_tweaks %}
+{% block body_block %}
+
+<h2 class="form-signin-heading">Register as a Sitter Here</h2>
+{% if registered %}
+  <strong>thank you for registering!</strong>
+   <a href="{% url 'login' %}">Log in </a><br/>
+   {% else %}
+
+<form method="post" novalidate>
+  {% csrf_token %}
+
+  {% for hidden_field in sitter_form.hidden_fields %}
+    {{ hidden_field }}
+  {% endfor %}
+
+  {% if sitter_form.non_field_errors %}
+  <div class="alert alert-danger" role="alert">
+    {% for error in sitter_form.non_field_errors %}
+      {{ error }}
+    {% endfor %}
+  </div>
+	{% endif %}
+
+{% for field in user_form.visible_fields%}
+  <div class="form-group">
+    {{ field.label_tag }}
+
+    {% if user_form.is_bound %}
+      {% if field.errors %}
+        {% render_field field class="form-control is-invalid" %}
+        {% for error in field.errors %}
+          <div class="invalid-feedback">
+            {{ error }}
+          </div>
+        {% endfor %}
+      {% else %}
+        {% render_field field class="form-control is-valid" %}
+      {% endif %}
+    {% else %}
+      {% render_field field class="form-control" %}
+    {% endif %}
+
+    {% if field.help_text %}
+      <small class="form-text text-muted">{{ field.help_text }}</small>
+    {% endif %}
+  </div>
+{% endfor %}
+
+{% for field in sitter_form.visible_fields%}
+  <div class="form-group">
+    {{ field.label_tag }}
+
+    {% if sitter_form.is_bound %}
+      {% if field.errors %}
+        {% render_field field class="form-control is-invalid" %}
+        {% for error in field.errors %}
+          <div class="invalid-feedback">
+            {{ error }}
+          </div>
+        {% endfor %}
+      {% else %}
+        {% render_field field class="form-control is-valid" %}
+      {% endif %}
+    {% else %}
+      {% render_field field class="form-control" %}
+    {% endif %}
+
+    {% if field.help_text %}
+      <small class="form-text text-muted">{{ field.help_text }}</small>
+    {% endif %}
+  </div>
+{% endfor %}
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endif %}
+{% endblock %}

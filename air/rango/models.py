@@ -21,9 +21,12 @@ class Dog(models.Model):
 
 class DogOwner(models.Model):
     user = models.OneToOneField(User)
-    picture = models.ImageField(upload_to='profile_images', blank=True)
+    picture = models.ImageField(upload_to='media', blank=True)
     city = models.CharField(max_length = 128)
     dog = models.ForeignKey(Dog, on_delete=models.CASCADE, null= True,blank=True)
+
+    def email(self):
+        return self.user.email
 
     def get_dog_name(self):
         return self.dog.name
@@ -43,7 +46,7 @@ class Hotel(models.Model):
     hotel_name = models.CharField(max_length=128)
     address = models.CharField(max_length = 256)
     city = models.CharField(max_length = 128)
-    picture = models.ImageField(upload_to='hotel_images', blank=True)
+    picture = models.ImageField(upload_to='media', blank=True)
     #phone_number = PhoneField(blank=True, help_text='Contact phone number')
     available_rooms = models.IntegerField()
     description = models.CharField(max_length = 500)
@@ -57,7 +60,7 @@ class DogSitter(models.Model):
     dog_size = [('S', 'Small'), ('M', 'Medium'),('L','Large')]
     dog_preferences = models.CharField(max_length=3, choices=dog_size)
     age = models.IntegerField()
-    picture = models.ImageField(upload_to='Sitter_images', blank=True)
+    picture = models.ImageField(upload_to='media', blank=True)
     bio = models.CharField(max_length = 500)
     price_per_night = models.IntegerField()
     availability  = models.CharField(max_length=128)
