@@ -1,0 +1,47 @@
+{% extends 'rango/base.html' %}
+{% load staticfiles %}
+{% block title %}
+{% endblock %}
+{% block body_block %}
+
+<style>
+        .picture {
+            object-fit: contain;
+            border-radius: 10px;
+            width: 100%;
+            height: auto;
+            min-height: 150px;
+            min-width: 100px;
+            max-height: 200px;
+            max-width: 200px;
+            background-color: #3d3d3d;
+        }
+
+</style>
+
+<h1> Results for {{ search }}'s in {{ query }}:  </h1>
+<div class="container-fluid">
+	{% if result_list %}
+		<ul>
+		{% for r in result_list %}
+		{% if search  == "hotels" %}
+		<li>
+		<img src="{{ MEDIA_URL }}{{ r.picture }}"alt="{{ r.name }}" class="picture"/> <strong> Hotel name:</strong> {{ r.user.username }}</br>
+     <strong>Hotel price:</strong> {{ r.price }} </br>
+     <strong> <a href="/rango/profile/{{ r.user.username }}"> See details</a></strong>
+		</li>
+		{% endif %}
+		{% if search == "dogsitters" %}
+		<li>
+		<img src="{{ MEDIA_URL }}{{ r.picture }}"alt="{{ r.name }}" class="picture"/> <strong> Dogsitter name:</strong> {{ r.user.username }}</br>
+     <strong>Dogsitter price:</strong> {{ r.price_per_night }} <strong></br>
+        <a href="/rango/profile/{{ r.user.username }}"> See details</a></strong>
+		</li>
+		{% endif %}
+		{% endfor %}
+		</ul>
+	{% else %}
+		<strong> No results found</strong>
+	{% endif %}
+</div>
+{% endblock %}

@@ -1,15 +1,13 @@
 {% extends 'rango/base.html' %}
 {% block body_block %}
-    <link href="http://v4-alpha.getbootstrap.com/dist/css/bootstrap.min.css"
-          rel="stylesheet">
-    <!-- Custom styles for this template -->
-    <link href=
-                  "http://v4-alpha.getbootstrap.com/examples/dashboard/dashboard.css"
-          rel="stylesheet">
-    <div class="row">
-        <div class="col-md-4"></div>
-        <div class="col-md-3 text-center">
+
+<div class="columns is-mobile">
+	<div class="column is-half is-offset-one-quarter">
+		</br>
+</br>
             <h1 class="display-4">Login</h1>
+
+	    
             <br/>
             <form class="form-signin" role="form" method="post" action=".">
                 {% csrf_token %}
@@ -26,12 +24,8 @@
                 <button class="btn btn-lg btn-primary btn-block" type="submit"value="Submit">
                 Sign in</button>
             </form>
-        </div>
-
-        <div class="col-md-4"></div>
-
-    </div>
-
+</div>
+</div>     
 
 
 {% endblock %}

@@ -1,0 +1,63 @@
+{% extends "rango/base.html" %}
+{% load widget_tweaks %}
+{% block title_block %}
+    Add a dog here!
+{% endblock %}
+{% block body_block %}
+
+	<style>
+
+        .profile-row {
+            background-color: rgba(0,0,0,0.05);
+            padding: 10px;
+            margin: 20px;
+            border-radius: 20px;
+        }
+</style>
+  <<h2>Register a dog here</h2>
+
+<div class="row profile-row">
+<form method="post" novalidate>
+  {% csrf_token %}
+
+  {% for hidden_field in form.hidden_fields %}
+    {{ hidden_field }}
+  {% endfor %}
+  
+  {% if form.non_field_errors %}
+  <div class="alert alert-danger" role="alert">
+    {% for error in form.non_field_errors %}
+      {{ error }}
+    {% endfor %}
+  </div>
+	{% endif %}
+
+
+{% for field in form.visible_fields %}
+  <div class="form-group">
+    {{ field.label_tag }}
+
+    {% if form.is_bound %}
+      {% if field.errors %}
+        {% render_field field class="form-control is-invalid" %}
+        {% for error in field.errors %}
+          <div class="invalid-feedback">
+            {{ error }}
+          </div>
+        {% endfor %}
+      {% else %}
+        {% render_field field class="form-control is-valid" %}
+      {% endif %}
+    {% else %}
+      {% render_field field class="form-control" %}
+    {% endif %}
+
+    {% if field.help_text %}
+      <small class="form-text text-muted">{{ field.help_text }}</small>
+    {% endif %}
+  </div>
+{% endfor %}
+	<button type="submit" class="btn btn-primary">Add your dog!</button>
+</form>
+</div>
+{% endblock %}
