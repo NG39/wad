@@ -1,7 +1,7 @@
 # AirBnBark Project
 AirBnBark - Rango Application - UoG 2018/19 WAD2
 
-![] (media/homepage.png)
+![1548179168507](media/homepage.png)
 
 Repository for the devleopment of our AirBnBark web application project.
 ## Team Members:
