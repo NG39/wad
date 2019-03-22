@@ -15,4 +15,6 @@ class DogSitterAdmin(admin.ModelAdmin):
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Page, PageAdmin)
 '''
+admin.site.register(DogSitter)
+admin.site.register(Hotel)
 admin.site.register(DogOwner)

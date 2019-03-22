@@ -103,15 +103,12 @@ def populate():
     for user in sitter_users:
         add_sitter(user)
 
-    for user in hotel_users:
-        add_hotel(user)
+    #for user in hotel_users:
+    #    add_hotel(user)
 
 
 def add_user(user):
-    try:
-        u = User.objects.get_or_create(username=user["username"],first_name=user["last_name"], last_name=user["last_name"], email=user["email"])[0]
-    except:
-        u = User.objects.get_or_create(username=user["username"], first_name=user["last_name"], last_name=user["last_name"])[0]
+    u = User.objects.get_or_create(username=user["username"], first_name=user["first_name"], last_name =user["last_name"],)[0]
     u.set_password(user["password"])
     u.save()
     print('- New user created/updated:', user['username'])
@@ -128,7 +125,7 @@ def add_sitter(user):
                 bio=user["bio"],
             	dog_preferences=user["dog_preferences"],
                 availability =user["availability"],
-                phone_number=user["phone_number"],
+                #phone_number=user["phone_number"],
                 price_per_night=user["price_pounds"],
                 city=user["city"]
                 )[0]

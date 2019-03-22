@@ -1,5 +1,6 @@
 {% extends 'rango/base.html' %}
 {% load staticfiles %}
+{% load widget_tweaks %}
 {% block title %}{{ selecteduser.username }} Profile {% endblock %}
 {% block body_block %}
 
@@ -35,19 +36,50 @@
        		<div class="left">
             	{% if userprofile.picture %}
                 	<img src="{{ MEDIA_URL }}{{ userprofile.picture }}"
-                     	alt="{{ selecteduser.username }}" class="profile-img"/>
+                     	alt="{{ selecteduser.username }}" class="profile-img"/></br>
+									{% for f in fields %}
+
+									{{ f }}
+									{% endfor %}
+
+
+
             	{% else %}
                 	<img src="{% static 'images/rango.jpg' %}" class="profile-img" alt="temporary profile pic"/>
             	{% endif %}
         	</div>
         	<div class="right">
-                	<form method="post" action="." enctype="multipart/form-data">
+                	<form method="post" novalidate>
                     	{% csrf_token %}
-                    	{{ form.as_p }}
-                    	<input class="btn btn-primary" type="submit" value="Update"/>
+						{% for field in form.visible_fields %}
+						  <div class="form-group">
+							{{ field.label_tag }}
+
+							{% if form.is_bound %}
+							  {% if field.errors %}
+								{% render_field field class="form-control is-invalid" %}
+								{% for error in field.errors %}
+								  <div class="invalid-feedback">
+									{{ error }}
+								  </div>
+								{% endfor %}
+							  {% else %}
+								{% render_field field class="form-control is-valid" %}
+							  {% endif %}
+							{% else %}
+							  {% render_field field class="form-control" %}
+							{% endif %}
+
+							{% if field.help_text %}
+							  <small class="form-text text-muted">{{ field.help_text }}</small>
+							{% endif %}
+							  </div>
+							{% endfor %}
+						  </div>
+                    	<button type="submit" class="btn btn-primary">Submit</button>
                 	</form>
-            </div>
         </div>
+
     {% else %}
     	<h1> {{ title }}'s Profile </h1>
     	<div class="row profile-row">
@@ -55,8 +87,13 @@
             	{% if userprofile.picture %}
                 	<img src="{{ MEDIA_URL }}{{ userprofile.picture }}"
                      	alt="{{ selecteduser.username }}" class="profile-img"/>
+											{% for f in fields %}
+
+											{{ f }}
+											{% endfor %}
             	{% else %}
                 	<img src="{% static 'images/rango.jpg' %}" class="profile-img" alt="temporary profile pic"/>
+
             	{% endif %}
         	</div>
         	<div class="right">
@@ -66,7 +103,7 @@
             				{% if not field.label == "picture" %}
             					   <strong> {{ field.label }}: </strong> {{ field.value }}
                     			<br/>
-                    {% endif %}
+					                    {% endif %}
                     </p>
                   {% endfor %}
 
@@ -74,7 +111,6 @@
     	<div id="edit_profile"></div>
   {% endif %}
     	</div>
-
     	<br/>
 
 

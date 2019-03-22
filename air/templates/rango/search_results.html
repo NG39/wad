@@ -5,7 +5,7 @@
 {% block body_block %}
 
 <style>
-        r.picture {
+        .picture {
             object-fit: contain;
             border-radius: 10px;
             width: 100%;
@@ -16,6 +16,7 @@
             max-width: 200px;
             background-color: #3d3d3d;
         }
+
 </style>
 
 <h1> Results for {{ search }}'s in {{ query }}:  </h1>
@@ -23,11 +24,20 @@
 	{% if result_list %}
 		<ul>
 		{% for r in result_list %}
-
-			<li> 
-			<img src="{{ MEDIA_URL }}{{ r.picture }}"alt="{{ r.name }}" class="profile-img"/> <strong> Hotel name:</strong> {{ r.name}} <strong>Hotel price:</strong> {{ r.price }} <strong> <a href="/profile/r.user.username"> See details </strong>
-			</li>  
-
+		{% if search  == "hotels" %}
+		<li>
+		<img src="{{ MEDIA_URL }}{{ r.picture }}"alt="{{ r.name }}" class="picture"/> <strong> Hotel name:</strong> {{ r.user.username }}</br>
+     <strong>Hotel price:</strong> {{ r.price }} </br>
+     <strong> <a href="/rango/profile/{{ r.user.username }}"> See details</a></strong>
+		</li>
+		{% endif %}
+		{% if search == "dogsitters" %}
+		<li>
+		<img src="{{ MEDIA_URL }}{{ r.picture }}"alt="{{ r.name }}" class="picture"/> <strong> Dogsitter name:</strong> {{ r.user.username }}</br>
+     <strong>Dogsitter price:</strong> {{ r.price_per_night }} <strong></br>
+        <a href="/rango/profile/{{ r.user.username }}"> See details</a></strong>
+		</li>
+		{% endif %}
 		{% endfor %}
 		</ul>
 	{% else %}

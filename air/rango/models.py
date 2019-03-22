@@ -4,19 +4,40 @@ from django.contrib.auth.models import User
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 from phone_field import PhoneField
 
+
+
+
+class Dog(models.Model):
+    max_length = 128
+    name = models.CharField(max_length = max_length)
+    dog_sizes = (('S', 'Small'), ('M', 'Medium'), ('L', 'Large'))
+    size = models.CharField(max_length=1, choices=dog_sizes)
+    age = models.IntegerField()
+    breed = models.CharField(max_length = max_length)
+    special_needs = models.CharField(max_length=max_length)
+    picture = models.ImageField(upload_to='dog_images', blank=True) ##CREATE DOG_IMAGES
+    class Meta:
+        abstract= True
+
 class DogOwner(models.Model):
     user = models.OneToOneField(User)
     picture = models.ImageField(upload_to='profile_images', blank=True)
-    phone_number = PhoneField(blank=True, help_text='Contact phone number')
+    #phone_number = PhoneField(blank=True, help_text='Contact phone number')
     city = models.CharField(max_length=128)
-    slug = models.SlugField()
+    dog = models.ForeignKey(Dog, on_delete=models.CASCADE, null= True,blank=True)
 
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.user.username)
-        super(DogOwner, self).save(*args, **kwargs)
+    def first_name(self):
+        return self.user.first_name
+    def last_name(self):
+        return self.user.last_name
+
+    def city(self):
+        return self.city
 
     def __str__(self):
 	       return self.user.username
+
+
 
 
 class Hotel(models.Model):
@@ -25,21 +46,10 @@ class Hotel(models.Model):
     address = models.CharField(max_length = 256)
     city = models.CharField(max_length = 128)
     picture = models.ImageField(upload_to='hotel_images', blank=True)
-    phone_number = PhoneField(blank=True, help_text='Contact phone number')
+    #phone_number = PhoneField(blank=True, help_text='Contact phone number')
     available_rooms = models.IntegerField()
     description = models.CharField(max_length = 500)
     price = models.IntegerField()
-    slug = models.SlugField()
-    '''info={
-    "City: ":city,
-    "Adress: ": address,
-    "Phone number: ":phone_number,
-    "Number of rooms available: ": available_rooms,
-    "Description: ": description,
-    "Price per night per room: "]'''
-    def save(self, *args, **kwargs):
-	       self.slug = slugify(self.user.username)
-	       super(Hotel, self).save(*args, **kwargs)
 
     def __str__(self):
 	       return self.user.username
@@ -53,14 +63,14 @@ class DogSitter(models.Model):
     bio = models.CharField(max_length = 500)
     price_per_night = models.IntegerField()
     availability  = models.CharField(max_length=128)
-    phone_number = PhoneField(blank=True, help_text='Contact phone number')
+    #phone_number = PhoneField(blank=True, help_text='Contact phone number')
     city = models.CharField(max_length=128)
-    slug = models.SlugField()
 
-    def save(self, *args, **kwargs):
-	       self.slug = slugify(self.user.username)
-	       super(DogSitter, self).save(*args, **kwargs)
+    def first_name(self):
+        return self.user.first_name
 
+    def last_name(self):
+        return self.user.last_name
     def __str__(self):
 	       return self.user.username
 
@@ -73,4 +83,3 @@ class Dog(models.Model):
     breed = models.CharField(max_length = max_length)
     special_needs = models.CharField(max_length=max_length)
     picture = models.ImageField(upload_to='dog_images', blank=True) ##CREATE DOG_IMAGES
-    owner = models.ForeignKey(DogOwner)
