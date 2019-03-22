@@ -362,26 +362,28 @@ def get_dog_owner(user):
 	DogOwner.objects.get(user=user)
 	userprofile = DogOwner.objects.get_or_create(user=user)[0]
 
-	form = DogOwnerForm({
-        'phone_number':userprofile.phone_number,
-        'city': userprofile.city,
-	})
-	return ("dog_owner",userprofile, form)
+	fields = ("Contact(phone number):\n"+userprofile.phone_number,
+    "City:\n"+userprofile.city)
+
+
+	return ("dog_owner",userprofile, fields)
 
 
 def get_hotel(user):
 	Hotel.objects.get(user=user)
 	userprofile = Hotel.objects.get_or_create(user=user)[0]
 
-	form = HotelForm({
-            'city': userprofile.city,
-            'address': userprofile.address,
-            'phone_number':userprofile.phone_number,
-            'available_rooms':userprofile.available_rooms,
-            'description':userprofile.description,
-            'price':userprofile.price,
-            })
-	return ("hotel",userprofile,form)
+    #title = userprofile.hotel_name
+
+	fields = (
+    "Description:\n"+userprofile.description,
+    "Adress:\n"+userprofile.address,
+    "City:\n"+userprofile.city,
+    "Number of available rooms:\n"+userprofile.available_rooms,
+    "Price in pounds:\n"+userprofile.price_pounds,
+    "Contact(phone number):\n"+userprofile.phone_number)
+
+	return ("hotel",userprofile, fields,title)
 
 def get_dog_sitter(user):
     a= DogSitter.objects.get(user=user)
@@ -396,7 +398,7 @@ def get_dog_sitter(user):
 def profile(request, username):
     type=""
     form=None
-
+    ct= {}
     try:
         user = User.objects.get(username=username)
     except User.DoesNotExist:
@@ -407,18 +409,9 @@ def profile(request, username):
     except:
         try:
             type,userprofile,fields = get_dog_sitter(user)
-            form =  DogSitterForm({
-                        'city': userprofile.city,
-                        #'address': userprofile.address,
-                        #'phone_number':userprofile.phone_number,
-                        #'available_rooms':userprofile.available_rooms,
-                    #    'description':userprofile.description,
-                    #    'price':userprofile.price,
-                        })
         except:
             try:
-                type,userprofile,form = get_hotel(user)
-                title = userprofile.hotel_name
+                type,userprofile,form,title = get_hotel(user)
             except:
                 pass
     #type,userprofile,form = get_dog_sitter(user)

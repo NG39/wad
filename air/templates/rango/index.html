@@ -4,56 +4,35 @@
     Index
 {% endblock %}
 {% block body_block %}
-    <style>
-        .rango {
-            width: 25vw;
 
 
-        }
-
-
-        .bubble {
-            background-color: #0d83d6;
-            color: white;
-            margin-left: 10px;
-            padding: 3px 10px;
-            border-radius: 10px;
-            font-size: 13px;
-        }
-    </style>
-
-    <div class="jumbotron">
-        <div class="row">
-            <div class="col-lg-10">
-                <h1 class="display-3">AirbnBark</h1>
-				<p>The AirBnB for dogs.</p>
+<header>
+        <div class="header-content">
+            <div class="header-content-inner">
+                <h1><em>Welcome to </em><strong> AirBnBark!</strong></h1>
                 {% if user.is_authenticated %}
-                    <h2>welcome {{ user.username }}!</h2>
-                {% else %}
-                    <h1> Welcome</h1>
-                {% endif %}
+                	<h2>Welcome {{ user.username }}!</h2>
+            	{% else %}
+                	<h2> Sign up and send your dogs on spring break its rad!</h2>
+            	{% endif %}
+            	<br/>
 
+            	<ul>
+                <form action="/search/" method="get">
+     					<input class="form-control" name="query" type="text" placeholder="Search location"></br>
+     					<select name="choice">
+     						<option class="containbitch" value="hotels">Hotels</option>
+     						<option class="containbitch" value="dogsitters">Dogsitters</option>
+     					</select>
+     					<input class="btn btn-primary btn-lg" value="Find your dog's next holiday accomodation" type="submit">
+     					</form>
 
-                <br/>
-				<ul class="nav nav-list flex-column">
-					 <form action="/search/" method="get">
-					<input name="query" type="text" placeholder="Search location"></br>
-					<select name="choice">
-						<option value="hotels">Hotels</option>
-						<option value="dogsitters">Dogsitters</option>
-					</select>
-					<input value="Search" type="submit">
-					</form>
-
-
-
-
-            </ul>
-
+		
+				</ul>
 
             </div>
-             </div>
-    </div>
+        </div>
+</header>
 
 
 {% endblock %}
