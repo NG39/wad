@@ -1,9 +1,15 @@
 # AirBnBark Project
 AirBnBark - Rango Application - UoG 2018/19 WAD2
 
-![1548179168507](media/homepage.png)
+![] (media/homepage.png)
 
-This repository is used for the development of our AirBnBark application 
+Repository for the devleopment of our AirBnBark web application project.
+## Team Members:
+Sanajana Karumuri
+Nicole Genkovska
+Kieran Swedlund
+Tiffany Babey
+Hakan Erkol
 
 ## Setup the project
 
