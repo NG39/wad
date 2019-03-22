@@ -67,6 +67,7 @@ def populate():
 		 "picture":"inna_green.jpg",
 		 "bio":"Hello, my name is Inna, I have worked with dogs for 5 years and I would love to take care of your furry best friend  while you are away.",
 		 "dog_preferences":('S', 'Small'),
+         "email":"user@gmail.com",
 		 "availability":" Friday, Saturday, Sunday",
 		 "phone_number":+14151234567,
 		 "price_pounds":20,
@@ -80,6 +81,7 @@ def populate():
 		 "picture":"zoe_jones.jpg",
 		 "bio":"Hello, my name is Zoe, I have a passion for dogs and a big garden where they can run and play.I work at home so I can take care of you dog whenever you are busy.",
 		  "dog_preferences":('M', 'Medium'),
+          "email":"user@gmail.com",
 		 "availability":" All week  except for Sundays.",
 		 "phone_number":+14151234567,
 		 "price_pounds":15,
@@ -91,6 +93,7 @@ def populate():
          "last_name":"Wilson",
 		 "age":65,
 		 "picture":"john_wilson.jpg",
+         "email":"user@gmail.com",
 		 "bio":"My name is John Wilson and I have taken care of dogs all my life.I have a lot of free time and I will be happy to help you ",
 		 "dog_preferences":('S', 'Small'),
 		 "availability":" All week.",
@@ -103,12 +106,12 @@ def populate():
     for user in sitter_users:
         add_sitter(user)
 
-    #for user in hotel_users:
-    #    add_hotel(user)
+    for user in hotel_users:
+        add_hotel(user)
 
 
 def add_user(user):
-    u = User.objects.get_or_create(username=user["username"], first_name=user["first_name"], last_name =user["last_name"],)[0]
+    u = User.objects.get_or_create(username=user["username"], first_name=user["first_name"], last_name =user["last_name"], email=user["email"])[0]
     u.set_password(user["password"])
     u.save()
     print('- New user created/updated:', user['username'])
