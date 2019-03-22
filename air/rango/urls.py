@@ -19,9 +19,7 @@ urlpatterns = [
     #url(r'^sitter_detail/(?P<username_slug>[\w\-]+)/$', views.profile_load, name='get_dogsitter_profile'),
     #url(r'^dog_owner_detail/(?P<username_slug>[\w\-]+)/$', views.profile_load, name='get_dog_owner_profile'),
     url(r'^search/$', views.search, name='search'),
-    #search result pages for all types of users
-    url(r'^hotel/(?P<username_slug>[\w\-]+)/$', views.show_hotel, name='show_hotel'),# username of the hotel
-    url(r'^dogsitter/(?P<username_slug>[\w\-]+)/$', views.show_dogsitter, name='show_dogsitter'),#username for dogsitter
+
 
     url(r'^add_dog/$', views.add_dog, name='add_dog'),
 

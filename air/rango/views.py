@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
-from rango.webhose_search import run_query
+
 from django.utils import timezone
 
 
@@ -71,54 +71,7 @@ def about(request):
 
 
 
-def show_hotel(request, hotel_name_slug):
 
-    context_dict = {}
-    try:
-
-        hotel = Hotel.objects.get(slug=hotel_name_slug)
-
-        context_dict['hotel'] = hotel
-        context_dict['query'] = hotel.name
-
-    except Hotel.DoesNotExist:
-        context_dict['hotel'] = None
-
-
-    result_list = []
-
-    if request.method == 'POST':
-        query = request.POST['query'].strip()
-        if query:
-
-            result_list = run_query(query)
-            context_dict['query'] = query
-            context_dict['result_list'] = result_list
-
-
-    return render(request, 'rango/hotel.html', context_dict)
-
-def show_dogsitter(request, dogsitter_name_slug):
-
-    context_dict = {}
-    try:
-        dogsitter = DogSitter.objects.get(slug=dogsitter_name_slug)
-        context_dict['dogsitter'] = dogsitter
-        context_dict['query'] = dogsitter.first_name + " " +dogsitter.last_name
-
-    except DogSitter.DoesNotExist:
-        context_dict['dogsitter'] = None
-
-    result_list = []
-
-    if request.method == 'POST':
-        query = request.POST['query'].strip()
-        if query:
-            result_list = run_query(query)
-            context_dict['query'] = query
-            context_dict['result_list'] = result_list
-
-    return render(request, 'rango/dogsitter.html', context_dict)
 
 
 

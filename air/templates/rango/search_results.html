@@ -29,11 +29,11 @@
 		<li>
 		<img src="{{ MEDIA_URL }}{{ r.picture }}"alt="{{ r.name }}" class="picture"/>
 		<tr>
-		<td> Hotel name:</td> 
-		<td> {{ r.user.username }} </td> </br>
+		<td> Hotel name:</td>
+		<td> {{ r.hotel_name }} </td> </br>
 		</tr>
 		<tr>
-     <td>Hotel price:</td> 
+     <td>Hotel price:</td>
 	 <td>{{ r.price }}</td>  </br>
 	 </tr>
      <strong> <a href="/rango/profile/{{ r.user.username }}"> See details</a></strong>
@@ -41,7 +41,7 @@
 		{% endif %}
 		{% if search == "dogsitters" %}
 		<li>
-		<img src="{{ MEDIA_URL }}{{ r.picture }}"alt="{{ r.name }}" class="picture"/> 
+		<img src="{{ MEDIA_URL }}{{ r.picture }}"alt="{{ r.name }}" class="picture"/>
 		<tr>
 		<td> Dogsitter name:</td> <td>{{ r.user.username }}</td></br>
 		</tr>
