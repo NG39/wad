@@ -5,11 +5,11 @@ AirBnBark - Rango Application - UoG 2018/19 WAD2
 
 Repository for the devleopment of our AirBnBark web application project.
 ## Team Members:
-Sanajana Karumuri
-Nicole Genkovska
-Kieran Swedlund
-Tiffany Babey
-Hakan Erkol
+Sanajana Karumuri,
+Nicole Genkovska,
+Kieran Swedlund,
+Tiffany Babey,
+Hakan Erkol,
 
 ## Setup the project
 
