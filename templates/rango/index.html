@@ -1,0 +1,41 @@
+{% extends 'rango/base.html' %}
+{% load staticfiles %}
+{% block title_block %}
+    Index
+{% endblock %}
+{% block body_block %}
+
+
+<header>
+        <div class="header-content">
+            <div class="header-content-inner">
+                <h1><em>Welcome to </em><strong> AirBnBark!</strong></h1>
+                {% if user.is_authenticated %}
+                	<h2>Welcome {{ user.username }}!</h2>
+            	{% else %}
+                	<h2> Sign up and send your dogs on spring break its rad!</h2>
+            	{% endif %}
+            	<br/>
+            	
+            	<ul>
+				<form action="/search/" method="get">
+					<input class="form-control" name="query" type="text" placeholder="Search location">
+					
+					<label class="containbitch">Hotel
+  						<input type="radio" form="radiobuttons" checked="checked" name="choice" id="c1">
+  						<span class="checkmark"></span>
+					</label>
+					<label class="containbitch">DogSitter
+  						<input type="radio" form="radiobuttons" name="choice" id="c2">
+  						<span class="checkmark"></span>
+					</label>
+					<input class="btn btn-primary btn-lg" value="Find your dog's next holiday accomodation" type="submit">
+				</form>
+				</ul>
+				
+            </div>
+        </div>
+</header>
+
+
+{% endblock %}
