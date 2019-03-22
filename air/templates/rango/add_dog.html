@@ -1,14 +1,22 @@
 {% extends "rango/base.html" %}
-
+{% load widget_tweaks %}
 {% block title_block %}
     Add a dog here!
 {% endblock %}
 {% block body_block %}
 
+	<style>
 
-  <<h2 class="form-signin-heading">Register a dog here</h2>
+        .profile-row {
+            background-color: rgba(0,0,0,0.05);
+            padding: 10px;
+            margin: 20px;
+            border-radius: 20px;
+        }
+</style>
+  <<h2>Register a dog here</h2>
 
-
+<div class="row profile-row">
 <form method="post" novalidate>
   {% csrf_token %}
 
@@ -51,5 +59,5 @@
 {% endfor %}
 	<button type="submit" class="btn btn-primary">Add your dog!</button>
 </form>
-
+</div>
 {% endblock %}

@@ -31,43 +31,42 @@
         }
 	</style>
 	{% if selecteduser.username == user.username %}
-		<h1>{{ selecteduser.username }}'s Profile</h1>
+		<center><h1>{{ selecteduser.username }}'s Profile</h1></center>
 		<div class="row profile-row">
-       		<div class="left">
+       		<div class="right">
             	{% if userprofile.picture %}
                 	<img src="{{ MEDIA_URL }}{{ userprofile.picture }}"
                      	alt="{{ selecteduser.username }}" class="profile-img"/></br>
-									{% for f in fields %}
-
-									{{ f }}</br>
-									{% endfor %}
-
-									<div>
-
-
-						{% if  type !=  "dog_owner" %}
-						<p> </p>
-						{% else %}
-											<p> ADD</p>
-											<a href="/rango/add_dog/{{ user.username }}"> Add Dog</a></strong></br>
-						{% endif %}
-						{% if doginfo %}
-							<h1>{{ selecteduser.username }}'s Dogs</h1>
-							<ul>
-							{% for r in doginfo %}
-
-								<li>
-									{{ r }} </br>
-								</li>
-
-							{% endfor %}
-							</ul>
-							{% endif %}
-
             	{% else %}
                 	<img src="{% static 'images/rango.jpg' %}" class="profile-img" alt="temporary profile pic"/>
             	{% endif %}
+			</div>
+			<div class="right">
+					{% for f in fields %}
+					{{ f }}</br>
+					{% endfor %}
+					
+				    {% if  type ==  "dog_owner" %}
+					<strong><a href="/rango/add_dog/"> Add Dog</a></strong></br>
+					{% if doginfo %}
+					<h1>{{ selecteduser.username }}'s Dogs</h1>
+					<ul>
+					{% for r in doginfo %}
+
+						<li>
+						{{ r }} </br>
+						</li>
+						</ul>
+				   {% endfor %}
+				   {% else %}
+				   No doggos found
+					
+					{% endif %}
+					{% endif %}
+				
+
         	</div>
+			
         	<div class="right">
                 	<form method="post" novalidate>
                     	{% csrf_token %}
@@ -120,7 +119,7 @@
             	{% endif %}
         	</div>
 
-					<div>
+			<div class="right">
 		{% if doginfo %}
 			<h1>{{ selecteduser.username }}'s Dogs</h1>
 			<ul>
@@ -136,7 +135,7 @@
 			{% else %}
 				<strong> No dogs found </strong>
 		{% endif %}
-	</div>
+			</div>
         	<div class="right">
 
             			{% for field in form %}

@@ -1,7 +1,11 @@
-{% extends "rango/base.html" %}
+ {% extends "rango/base.html" %}
 {% load widget_tweaks %}
 {% block body_block %}
 
+<br/><br/>
+<div class="columns is-mobile">
+	<div class="column is-half is-offset-one-quarter">
+</br>
 <h2 class="form-signin-heading">Register as a Hotel Here</h2>
 {% if registered %}
   <strong>thank you for registering!</strong>
@@ -75,4 +79,6 @@
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 {% endif %}
+</div>
+</div>
 {% endblock %}

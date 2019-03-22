@@ -3,6 +3,7 @@ body {
     width: 100%;
     height: 100%;
     font-family: 'Open Sans','Helvetica Neue',Arial,sans-serif;
+    background-color: rgba(255,168,79,0.5)
 }
 
 a {
@@ -80,7 +81,7 @@ header .header-content .header-content-inner p {
         max-width: 1000px;
     }
 
-	header .header-content .header-content-inner h1 {
+    header .header-content .header-content-inner h1 {
     	font-size: 100px;
     	font-weight: bold;
 	}
@@ -129,19 +130,19 @@ header .header-content .header-content-inner p {
 
 .navbar-default {
     border-color: rgba(34,34,34,.05);
-    background-color: #fff;
+    background-color: #FE9F10;
     -webkit-transition: all .35s;
     -moz-transition: all .35s;
     transition: all .35s;
 }
 
 .navbar-default .navbar-header .navbar-brand {
-    color: #FA0186;
+    color: #FE9F10;
 }
 
 .navbar-default .navbar-header .navbar-brand:hover,
 .navbar-default .navbar-header .navbar-brand:focus {
-    color: #eb3812;
+    color: #FA0186;
 }
 
 .navbar-default .nav > li>a,
@@ -168,7 +169,7 @@ header .header-content .header-content-inner p {
 @media(min-width:768px) {
     .navbar-default {
         border-color: rgba(255,255,255,.3);
-        background-color: transparent;
+        background-color: rgba(255,168,79,0.5);
     }
 
     .navbar-default .navbar-header .navbar-brand {
@@ -280,69 +281,65 @@ fieldset[disabled] .btn-default.active {
     transition: all .35s;
 }
 
-.containbitch {
-  display: block;
+/*the container must be positioned relative:*/
+.custom-select {
   position: relative;
-  padding-left: 35px;
-  margin-bottom: 12px;
-  cursor: pointer;
-  font-size: 20px;
-  color: #FA0186
-  background-color: #ddd;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+  font-family: Arial;
 }
 
-/* Hide the browser's default radio button */
-.containbitch input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
+.custom-select select {
+  display: none; /*hide original SELECT element:*/
 }
 
-/* Create a custom radio button */
-.checkmark {
-  position: absolute;
-  top: 2px;
-  left: 410px;
-  height: 25px;
-  width: 25px;
-  background-color: #eee;
-  border-radius: 50%;
-}
-
-/* On mouse-over, add a grey background color */
-.containbitch:hover input ~ .checkmark {
+.select-selected {
   background-color: #FE9F10;
 }
 
-/* When the radio button is checked, add an orange background */
-.containbitch input:checked ~ .checkmark {
-  background-color: #FA0186;
+/*style the arrow inside the select element:*/
+.select-selected:after {
+  position: absolute;
+  content: "";
+  top: 14px;
+  right: 10px;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-color: #fff transparent transparent transparent;
 }
 
-/* Create the indicator (the dot/circle - hidden when not checked) */
-.checkmark:after {
-  content: "";
+/*point the arrow upwards when the select box is open (active):*/
+.select-selected.select-arrow-active:after {
+  border-color: transparent transparent #fff transparent;
+  top: 7px;
+}
+
+/*style the items (options), including the selected item:*/
+.select-items div,.select-selected {
+  color: #ffffff;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+  cursor: pointer;
+  user-select: none;
+}
+
+/*style items (options):*/
+.select-items {
   position: absolute;
+  background-color: #FE9F10;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 99;
+}
+
+/*hide the items when the select box is closed:*/
+.select-hide {
   display: none;
 }
 
-/* Show the indicator (dot/circle) when checked */
-.containbitch input:checked ~ .checkmark:after {
-  display: block;
-}
-
-/* Style the indicator (dot/circle) */
-.containbitch .checkmark:after {
- 	top: 9px;
-	left: 9px;
-	width: 8px;
-	height: 8px;
-	border-radius: 50%;
-	background: white;
+.select-items div:hover, .same-as-selected {
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .btn-primary:hover,

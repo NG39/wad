@@ -13,9 +13,9 @@ def populate():
 
     hotel_users = [
         {"username":"happypuppy",
-        "hotel_name": "Happy Puppy",
         "first_name":"Iren",
         "last_name":"Smith",
+        "hotel_name": "Happy Puppy",
 		"address":"234 Great Western Road",
 		"city":"Glasgow",
 		"picture":"happy_puppy.jpg",
@@ -28,7 +28,7 @@ def populate():
 		},
 		{"username":"littlepaw",
         "hotel_name": "Little Paw",
-        "fist_name":"David",
+        "first_name":"David",
         "last_name":"Smith",
 		"address":"131 Argyle Street",
 		"city":"Glasgow",

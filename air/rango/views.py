@@ -256,45 +256,23 @@ def register_dog_owner(request):
         context=ctx)
 
 
-''' # FIXME:  on click  not with city name arg
-def get_hotel_profile(request, city_name):
-    hot = Hotel.objects.get(city=city_name)
-    context = {
-        ##what we want to be displayed##
-        'name': hot.name,
-        'description': hot.description,
-    }
-    return render(request, "rango/hot_detail.html", context)
 
- # FIXME:  on click  not with city name arg get profile page if u are a dogsitter
-def get_dogsitter_profile(request, city_name):
-    sitter = DogSitter.objects.get(city=city_name)
-    context = {
-        ##what we want to be displayed##
-        'name': sitter.name,
-        'description': sitter.description,
-    }
-    return render(request, "rango/sitter_detail.html", context)
-
- # FIXME:  get the profilepage when u are a dog owner
-def get_dog_owner_profile(request):
-    owner = DogOwner.objects.getall()
-    context = {
-        ##what we want to be displayed##
-        'name': owner.name,
-        'description': owner.description,
-    }
-    return render(request, "rango/dog_owner_detail.html", context)
-'''
 def add_dog(request):
-    form = AddDogForm()
+    form = DogForm()
 
     if request.method == 'POST':
-        form = AddDogForm(request.POST)
+        form = DogForm(request.POST)
 
         if form.is_valid():
+            owner= DogOwner.objects.get_or_create(user=request.user)[0]
+            dog = form.save(commit=False)
+            dog.owner= owner
+            if 'picture' in request.FILES:
+                dog.picture = request.FILES['picture']
 
-            form.save(commit=True)
+            dog.save()
+
+
             return index(request)
         else:
             print(form.errors)
@@ -364,16 +342,16 @@ def get_dog_owner(user):
     fields = (
     "Name:\n"+ userprofile.user.first_name+
     " " + userprofile.user.last_name,
-    "\nEmail:\n"+userprofile.email(),
+    "\nEmail:\n"+userprofile.user.email,
     "\nCity:\n"+userprofile.city)
     try:
-        userprofile.get_dog_name()
+        dog = Dog.objects.filter(owner = userprofile)[0]
         doginfo = (
-        "Name:\n"+userprofile.name,
-        "\nBreed:\n"+userprofile.breed,
-        "\nSize:\n"+str(userprofile.size),
-        "\nAge:\n"+str(userprofile.age),
-        "\nSpecial needs:\n"+userprofile.special_needs
+        "Name:\n"+dog.name,
+        "\nBreed:\n"+dog.breed,
+        "\nSize:\n"+str(dog.size),
+        "\nAge:\n"+str(dog.age),
+        "\nSpecial needs:\n"+dog.special_needs
 
         )
     except:
@@ -392,9 +370,9 @@ def get_hotel(user):
     "Description:\n"+userprofile.description,
     "Adress:\n"+userprofile.address,
     "City:\n"+userprofile.city,
-    "Email:\n"+userprofile.email(),
+    "Email:\n"+userprofile.user.email,
     "Number of available rooms:\n"+str(userprofile.available_rooms),
-    "Price in pounds:\n"+str(userprofile.price_pounds),)
+    "Price in pounds:\n"+str(userprofile.price),)
     return (userprofile, fields,title)
 
 def get_dog_sitter(user):
@@ -415,6 +393,7 @@ def get_dog_sitter(user):
 @login_required
 def profile(request, username):
     form=None
+    doginfo = None
     ct= {}
     try:
         user = User.objects.get(username=username)
@@ -435,15 +414,15 @@ def profile(request, username):
                 type = "hotel"
             except:
                 pass
+
     if type=="dog_owner":
-
         form = DogOwnerForm(request.POST,  request.FILES, instance=userprofile)
-
     elif type=="hotel":
         form = HotelForm(request.POST, request.FILES, instance=userprofile)
-    else:
+    elif type == "dog_sitter":
         form = DogSitterForm(request.POST, request.FILES, instance=userprofile)
-
+    else:
+        form = DogOwnerForm()
     if request.method == 'POST':
         if form.is_valid():
             user = User.objects.get(username=username)
@@ -459,4 +438,4 @@ def profile(request, username):
             print(form.errors)
 
     return render(request, 'rango/profile.html', {'type':type, "fields":fields, 'title':title,
-            'userprofile': userprofile, 'selecteduser': user, 'form': form})
+            'userprofile': userprofile, 'selecteduser': user, 'form': form,  'doginfo': doginfo,})
