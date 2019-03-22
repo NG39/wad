@@ -42,6 +42,19 @@
 									{{ f }}
 									{% endfor %}
 
+									<div>
+						{% if doginfo %}
+							<h1>{{ selecteduser.username }}'s Dogs</h1>
+							<ul>
+							{% for r in doginfo %}
+
+								<li>
+									{{ r }} </br>
+								</li>
+
+							{% endfor %}
+							</ul>
+
 
 
             	{% else %}
@@ -87,6 +100,7 @@
             	{% if userprofile.picture %}
                 	<img src="{{ MEDIA_URL }}{{ userprofile.picture }}"
                      	alt="{{ selecteduser.username }}" class="profile-img"/>
+
 											{% for f in fields %}
 
 											{{ f }}
@@ -96,6 +110,24 @@
 
             	{% endif %}
         	</div>
+
+					<div>
+		{% if doginfo %}
+			<h1>{{ selecteduser.username }}'s Dogs</h1>
+			<ul>
+			{% for r in doginfo %}
+
+				<li>
+					{{ r }} </br>
+				</li>
+
+			{% endfor %}
+			</ul>
+
+			{% else %}
+				<strong> No dogs found </strong>
+		{% endif %}
+	</div>
         	<div class="right">
 
             			{% for field in form %}
