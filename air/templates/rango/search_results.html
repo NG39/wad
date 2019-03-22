@@ -24,20 +24,34 @@
 	{% if result_list %}
 		<ul>
 		{% for r in result_list %}
+		<table border="0px" width="300px">
 		{% if search  == "hotels" %}
 		<li>
-		<img src="{{ MEDIA_URL }}{{ r.picture }}"alt="{{ r.name }}" class="picture"/> <strong> Hotel name:</strong> {{ r.user.username }}</br>
-     <strong>Hotel price:</strong> {{ r.price }} </br>
+		<img src="{{ MEDIA_URL }}{{ r.picture }}"alt="{{ r.name }}" class="picture"/>
+		<tr>
+		<td> Hotel name:</td> 
+		<td> {{ r.user.username }} </td> </br>
+		</tr>
+		<tr>
+     <td>Hotel price:</td> 
+	 <td>{{ r.price }}</td>  </br>
+	 </tr>
      <strong> <a href="/rango/profile/{{ r.user.username }}"> See details</a></strong>
 		</li>
 		{% endif %}
 		{% if search == "dogsitters" %}
 		<li>
-		<img src="{{ MEDIA_URL }}{{ r.picture }}"alt="{{ r.name }}" class="picture"/> <strong> Dogsitter name:</strong> {{ r.user.username }}</br>
-     <strong>Dogsitter price:</strong> {{ r.price_per_night }} <strong></br>
+		<img src="{{ MEDIA_URL }}{{ r.picture }}"alt="{{ r.name }}" class="picture"/> 
+		<tr>
+		<td> Dogsitter name:</td> <td>{{ r.user.username }}</td></br>
+		</tr>
+		<tr>
+     <td>Dogsitter price:</td> <td>{{ r.price_per_night }} </td></br>
+	 </tr>
         <a href="/rango/profile/{{ r.user.username }}"> See details</a></strong>
 		</li>
 		{% endif %}
+		</table>
 		{% endfor %}
 		</ul>
 	{% else %}
