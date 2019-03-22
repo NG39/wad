@@ -125,7 +125,7 @@ def add_sitter(user):
                 bio=user["bio"],
             	dog_preferences=user["dog_preferences"],
                 availability =user["availability"],
-                phone_number=user["phone_number"],
+                #phone_number=user["phone_number"],
                 price_per_night=user["price_pounds"],
                 city=user["city"]
                 )[0]
@@ -142,7 +142,7 @@ def add_hotel(user):
                 address=user["address"],
                 city=user["city"],
                 picture=user["picture"],
-            	phone_number=user["phone_number"],
+            	#phone_number=user["phone_number"],
                 available_rooms=user["available_rooms"],
                 description=user["description"],
                 price=user["price_pounds"]

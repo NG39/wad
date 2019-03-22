@@ -359,31 +359,36 @@ def user_deactivate(request, username):
 
 
 def get_dog_owner(user):
-	DogOwner.objects.get(user=user)
-	userprofile = DogOwner.objects.get_or_create(user=user)[0]
+    doginfo = None
+    DogOwner.objects.get(user=user)
+    userprofile = DogOwner.objects.get_or_create(user=user)[0]
+    fields = ("Contact(phone number):\n"+userprofile.phone_number,"City:\n"+userprofile.city)
 
-	fields = ("Contact(phone number):\n"+userprofile.phone_number,
-    "City:\n"+userprofile.city)
+    if(username.dog!=null):
+        doginfo = (
+        "Name:\n"+userprofile.name,
+        "Breed:\n"+userprofile.breed,
+        "Size:\n"+userprofile.size,
+        "Age:\n"+userprofile.age,
+        "Special needs:\n"+userprofile.special_needs
 
+        )
 
-	return ("dog_owner",userprofile, fields)
+    return ("dog_owner",userprofile, fields,doginfo )
 
 
 def get_hotel(user):
-	Hotel.objects.get(user=user)
-	userprofile = Hotel.objects.get_or_create(user=user)[0]
-
-    #title = userprofile.hotel_name
-
-	fields = (
+    Hotel.objects.get(user=user)
+    userprofile = Hotel.objects.get_or_create(user=user)[0]
+    title = userprofile.hotel_name
+    fields = (
     "Description:\n"+userprofile.description,
     "Adress:\n"+userprofile.address,
     "City:\n"+userprofile.city,
     "Number of available rooms:\n"+userprofile.available_rooms,
     "Price in pounds:\n"+userprofile.price_pounds,
     "Contact(phone number):\n"+userprofile.phone_number)
-
-	return ("hotel",userprofile, fields,title)
+    return ("hotel",userprofile, fields,title)
 
 def get_dog_sitter(user):
     a= DogSitter.objects.get(user=user)
@@ -405,7 +410,7 @@ def profile(request, username):
         return redirect('index')
     title = user.first_name + " "+ user.last_name
     try:
-        type,userprofile,form = get_dog_owner(user)
+        type,userprofile,form,dog = get_dog_owner(user)
     except:
         try:
             type,userprofile,fields = get_dog_sitter(user)

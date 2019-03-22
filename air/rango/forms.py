@@ -31,14 +31,14 @@ class DogOwnerForm(forms.ModelForm):
     #email = forms.EmailField(max_length=128, help_text = "Please enter your email.")
     #username = forms.CharField(max_length=128, help_text = "Please enter your username.")
     #password = forms.CharField(widget=forms.PasswordInput())
-    phone_number = PhoneField(blank=True, help_text='Contact phone number')
+    #phone_number = PhoneField(blank=True, help_text='Contact phone number')
     city = forms.CharField(required=False,max_length=128, help_text = "Please enter your city.")
     picture = forms.ImageField(required=False)
 
     class Meta:
         model = DogOwner
         exclude = ('user',)
-        fields = ( 'city', 'picture','phone_number', )
+        fields = ( 'city', 'picture', )
 
 class HotelForm(forms.ModelForm):
     #email = forms.EmailField(max_length=128, help_text = "Please enter your email.")
@@ -47,7 +47,7 @@ class HotelForm(forms.ModelForm):
     address = forms.CharField(required=False,max_length=128, help_text = "Please enter the hotel's address.")
     city = forms.CharField(required=False,max_length=128, help_text = "Please enter the city of your hotel.")
     picture = forms.ImageField(required=False)
-    phone_number = PhoneField(blank=True, help_text='Contact phone number')
+    #phone_number = PhoneField(blank=True, help_text='Contact phone number')
     available_rooms = forms.IntegerField(required=False,)
     description = forms.CharField(required=False,max_length = 500)
     price = forms.IntegerField(required=False,)
@@ -56,7 +56,7 @@ class HotelForm(forms.ModelForm):
     class Meta:
         model = Hotel
         exclude = ('user',)
-        fields = ('hotel_name', 'address', 'city', 'available_rooms', 'description', 'price','phone_number', 'picture','phone_number',)
+        fields = ('hotel_name', 'address', 'city', 'available_rooms', 'description', 'price', 'picture',)
 
 
 class DogSitterForm(forms.ModelForm):
@@ -66,10 +66,10 @@ class DogSitterForm(forms.ModelForm):
     bio = forms.CharField(required=False,max_length = 500, help_text = "Why do you want to be a dogsitter?")
     price_per_night = forms.IntegerField(required=False, help_text = "Please enter your per night price.")
     availability = forms.CharField(required=False,max_length=128)
-    phone_number = PhoneField(blank=True, help_text='Contact phone number')
+    #phone_number = PhoneField(blank=True, help_text='Contact phone number')
     city = forms.CharField(required=False,max_length=128, help_text = "Please enter the city you live in.")
 
     class Meta:
         model = DogSitter
         exclude = ('user',)
-        fields = ('picture','dog_preferences', 'age', 'bio', 'price_per_night', 'availability', 'city','phone_number', )
+        fields = ('picture','dog_preferences', 'age', 'bio', 'price_per_night', 'availability', 'city', )
